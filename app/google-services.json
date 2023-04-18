@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "448054236502",
+    "project_id": "codemaster-a6cb7",
+    "storage_bucket": "codemaster-a6cb7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448054236502:android:b70c4f4158473dd887b2f7",
+        "android_client_info": {
+          "package_name": "com.example.codemaster"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "448054236502-jev60j17iracce3n160qtgjm0fmrekes.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApB5UNkNCMG_xPFrebJCCfHG7B6BmIOSY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "448054236502-jev60j17iracce3n160qtgjm0fmrekes.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "2"
+}
