@@ -1,6 +1,7 @@
 package com.example.codemaster.ui.screens.login
 
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,19 +35,54 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.example.codemaster.data.model.Response
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
+    onNavigateToHome: ()-> Unit,
+    onNavigateToSignup: ()-> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     var email by rememberSaveable { mutableStateOf("")}
     var password by rememberSaveable { mutableStateOf("")}
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+
     val state = viewModel.loginState.collectAsState(initial = null)
+    val userDetailState = viewModel.userDetails.collectAsState()
+
+    userDetailState.value.let {
+        when(it) {
+            is Response.Loading -> {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    if (state.value?.isLoading == true) {
+                        CircularProgressIndicator()
+                    }
+                }
+            }
+            is Response.Success -> {
+                LaunchedEffect(Unit) {
+                    val success = state.value?.isSuccess
+                    onNavigateToHome()
+                    Toast.makeText(context, "$success", Toast.LENGTH_LONG).show()
+                }
+            }
+            is Response.Failure -> {
+                LaunchedEffect(Unit) {
+                    val failure = state.value?.isFailure
+                    Toast.makeText(context, "$failure", Toast.LENGTH_LONG).show()
+                }
+            }
+            else -> {}
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -120,33 +156,17 @@ fun LoginScreen(
                 modifier = Modifier
                     .padding(7.dp),
                 fontSize = 16.sp
-
             )
         }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            if (state.value?.isLoading == true) {
-                CircularProgressIndicator()
-            }
-        }
-
-        LaunchedEffect(key1 = state.value?.isSuccess) {
-            scope.launch {
-                if (state.value?.isSuccess?.isNotEmpty() == true) {
-                    val success = state.value?.isSuccess
-                    Toast.makeText(context, "${success}", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-
-        LaunchedEffect(key1 = state.value?.isFailure) {
-            scope.launch {
-                if (state.value?.isFailure?.isNotEmpty() == true) {
-                    val error = state.value?.isFailure
-                    Toast.makeText(context, "${error}", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            modifier = Modifier
+                .padding(15.dp)
+                .clickable {
+                    onNavigateToSignup()
+                },
+            text = "Already Have an account? login In",
+            fontWeight = FontWeight.Bold, color = Color.Black, fontFamily = FontFamily.SansSerif
+        )
     }
-
 }
