@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.codemaster.data.model.Response
 import com.example.codemaster.data.source.repository.Repository
+import com.example.codemaster.utils.NavigateUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -30,6 +31,9 @@ class PlatformViewModel @Inject constructor(
 
     private val _leetcodeUser = MutableStateFlow("")
     val leetcodeUser = _leetcodeUser.asStateFlow()
+
+    private val _uiEvents = Channel<NavigateUI>()
+    val uiEvents = _uiEvents.receiveAsFlow()
 
     init {
         viewModelScope.launch {
@@ -104,6 +108,10 @@ class PlatformViewModel @Inject constructor(
             // data is collected at viewmodel and state is updated
             _leetcodeUser.value = it.toString()
         }
+    }
+
+    fun onEvent(event : NavigateUI) = viewModelScope.launch {
+        _uiEvents.send(event)
     }
 }
 

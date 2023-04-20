@@ -11,10 +11,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,7 +34,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.example.codemaster.components.CustomDialog
 import com.example.codemaster.components.TextBox
+import com.example.codemaster.navigation.Screens
 import com.example.codemaster.ui.theme.CodeMasterTheme
+import com.example.codemaster.utils.NavigateUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
@@ -40,9 +44,25 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlatformScreen(
-    onNavigateToHome: ()-> Unit,
+    onNavigate: (route: Screens)-> Unit,
     viewModel: PlatformViewModel = hiltViewModel()
 ) {
+
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvents.collect {
+            when(it) {
+                is NavigateUI.Navigate -> {
+                    onNavigate(it.onNavigate)
+                }
+                is NavigateUI.Snackbar -> {
+
+                }
+                is NavigateUI.PopBackStack-> {
+
+                }
+            }
+        }
+    }
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -75,7 +95,7 @@ fun PlatformScreen(
         Spacer(modifier = Modifier.height(20.dp))
         Button(
             onClick = {
-                onNavigateToHome()
+                viewModel.onEvent(NavigateUI.Navigate(Screens.HomeScreen))
             },
             modifier = Modifier
                 .fillMaxWidth()

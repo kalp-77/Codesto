@@ -1,4 +1,4 @@
-package com.example.codemaster.data.model.Codeforces_Official
+package com.example.codemaster.data.model.codeforces_model
 
 data class RatingChangeResult(
     val contestId: Int,

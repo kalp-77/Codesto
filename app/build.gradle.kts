@@ -101,6 +101,9 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
 
+    // graph
+    implementation("com.github.madrapps:plot:0.1.2")
+
     //retrofit
     implementation(libs.gson)
     implementation(libs.retrofit)

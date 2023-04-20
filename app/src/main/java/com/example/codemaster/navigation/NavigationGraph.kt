@@ -20,16 +20,9 @@ fun NavigationGraph(
     ) {
         composable(route = Screens.LoginScreen.route) {
             LoginScreen(
-                onNavigateToHome = {
-                    navController.navigate(Screens.HomeScreen.route) {
-                        popUpTo(Screens.HomeScreen.route) {
-                            inclusive = true
-                        }
-                    }
-                },
-                onNavigateToSignup = {
-                    navController.navigate(Screens.SignupScreen.route){
-                        popUpTo(Screens.SignupScreen.route){
+                onNavigate = {
+                    navController.navigate(it.route) {
+                        popUpTo(it.route) {
                             inclusive = true
                         }
                     }
@@ -38,18 +31,18 @@ fun NavigationGraph(
         }
         composable(route = Screens.SignupScreen.route) {
             SignupScreen(
-                onNavigateToPlatform = {
-                    navController.navigate(Screens.PlatformScreen.route){
-                        popUpTo(Screens.PlatformScreen.route){ inclusive = true }
+                onNavigate = {
+                    navController.navigate(it.route){
+                        popUpTo(it.route){ inclusive = true }
                     }
                 }
             )
         }
         composable(route = Screens.PlatformScreen.route) {
             PlatformScreen(
-                onNavigateToHome = {
-                    navController.navigate(Screens.HomeScreen.route) {
-                        popUpTo(Screens.HomeScreen.route) {
+                onNavigate = {
+                    navController.navigate(it.route) {
+                        popUpTo(it.route) {
                             inclusive = true
                         }
                     }
@@ -58,6 +51,12 @@ fun NavigationGraph(
         }
         composable(route = Screens.HomeScreen.route) {
             HomeScreen()
+        }
+        composable(route = Screens.CodechefScreen.route) {
+            CodechefScreen()
+        }
+        composable(route = Screens.CodeforcesScreen.route) {
+            Co
         }
     }
 }

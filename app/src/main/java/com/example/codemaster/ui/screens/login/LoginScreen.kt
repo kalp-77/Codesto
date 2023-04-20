@@ -17,7 +17,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,16 +34,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.example.codemaster.data.model.Response
+import com.example.codemaster.navigation.Screens
+import com.example.codemaster.utils.NavigateUI
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    onNavigateToHome: ()-> Unit,
-    onNavigateToSignup: ()-> Unit,
+    onNavigate: (route: Screens)-> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     var email by rememberSaveable { mutableStateOf("")}
@@ -52,9 +51,23 @@ fun LoginScreen(
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    val state = viewModel.loginState.collectAsState(initial = null)
     val userDetailState = viewModel.userDetails.collectAsState()
 
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvents.collect {
+            when(it) {
+                is NavigateUI.Navigate -> {
+                    onNavigate(it.onNavigate)
+                }
+                is NavigateUI.Snackbar -> {
+
+                }
+                is NavigateUI.PopBackStack-> {
+
+                }
+            }
+        }
+    }
     userDetailState.value.let {
         when(it) {
             is Response.Loading -> {
@@ -62,21 +75,18 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    if (state.value?.isLoading == true) {
-                        CircularProgressIndicator()
-                    }
+                    CircularProgressIndicator()
                 }
             }
             is Response.Success -> {
                 LaunchedEffect(Unit) {
-                    val success = state.value?.isSuccess
-                    onNavigateToHome()
-                    Toast.makeText(context, "$success", Toast.LENGTH_LONG).show()
+                    val userData = userDetailState.value?.data
+                    Toast.makeText(context, "Login successful", Toast.LENGTH_LONG).show()
                 }
             }
             is Response.Failure -> {
                 LaunchedEffect(Unit) {
-                    val failure = state.value?.isFailure
+                    val failure = userDetailState.value?.message
                     Toast.makeText(context, "$failure", Toast.LENGTH_LONG).show()
                 }
             }
@@ -163,7 +173,7 @@ fun LoginScreen(
             modifier = Modifier
                 .padding(15.dp)
                 .clickable {
-                    onNavigateToSignup()
+                     viewModel.onEvent(NavigateUI.Navigate(Screens.SignupScreen))
                 },
             text = "Already Have an account? login In",
             fontWeight = FontWeight.Bold, color = Color.Black, fontFamily = FontFamily.SansSerif

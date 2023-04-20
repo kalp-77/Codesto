@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.codemaster.data.model.Response
 import com.example.codemaster.data.source.repository.Repository
+import com.example.codemaster.navigation.Screens
+import com.example.codemaster.utils.NavigateUI
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -24,39 +26,35 @@ class LoginViewModel @Inject constructor(
     private val authRepository: Repository
 ) : ViewModel() {
 
-    // Hot Channel flow
-    val _loginState = Channel<LoginState>()
-    val loginState = _loginState.receiveAsFlow()
+    /** Hot Flows **/
+    private var _uiEvents = Channel<NavigateUI>()
+    val uiEvents = _uiEvents.receiveAsFlow()
 
-    // Cold State flow
+    /** Cold Flows **/
     private var _userDetails = MutableStateFlow<Response<FirebaseUser>?>(null)
-    val userDetails : StateFlow<Response<FirebaseUser>?> = _userDetails
+    val userDetails : StateFlow<Response<FirebaseUser>?> = _userDetails.asStateFlow()
 
-    val currentUser: FirebaseUser?
+    private val currentUser: FirebaseUser?
         get() = authRepository.currentUser
 
     init {
-        if(authRepository.currentUser != null) {
-            viewModelScope.launch {
-                _loginState.send(LoginState(isSuccess = "already logged in"))
-                _userDetails.value = Response.Success(authRepository.currentUser)
-            }
+        if(currentUser != null) {
+            onEvent(NavigateUI.Navigate(onNavigate = Screens.HomeScreen))
         }
     }
+
     fun loginUser(email : String, password: String) = viewModelScope.launch{
         val authData = authRepository.loginUser(email, password)
         authData.collect {result->
             when(result){
                 is Response.Loading<*> -> {
-                    _loginState.send(LoginState(isLoading = true))
                     _userDetails.value = Response.Loading()
                 }
                 is Response.Success<*> -> {
-                    _loginState.send(LoginState(isSuccess = "SuccessFully Logged in"))
                     _userDetails.value = Response.Success(result.data?.user)
+                    onEvent(NavigateUI.Navigate(onNavigate = Screens.HomeScreen))
                 }
                 is Response.Failure<*> -> {
-                    _loginState.send(LoginState(isFailure = result.message))
                     _userDetails.value = Response.Failure(result.message.toString())
                 }
             }
@@ -64,5 +62,10 @@ class LoginViewModel @Inject constructor(
     }
     fun logout() = viewModelScope.launch {
         authRepository.logout()
+        onEvent(NavigateUI.Navigate(onNavigate = Screens.LoginScreen))
+    }
+
+    fun onEvent(event: NavigateUI) = viewModelScope.launch {
+        _uiEvents.send(event)
     }
 }

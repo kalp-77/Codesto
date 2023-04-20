@@ -15,11 +15,12 @@ activity-compose = "1.7.0"
 compose-bom = "2023.04.00"
 firebase-auth-ktx = "21.3.0"
 firebase-database-ktx = "20.2.0"
+squareup-converter-gson = "2.9.0"
 ui-tooling = "1.4.1"
 ui-tooling-preview = "1.4.1"
 retrofit = "2.9.0"
 converter-gson = "2.9.0"
-gson = "2.9.1"
+gson = "2.10.1"
 
 [libraries]
 androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hilt-compiler" }
@@ -39,6 +40,7 @@ espresso-core = { group = "androidx.test.espresso", name = "espresso-core", vers
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+retrofit2-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "squareup-converter-gson" }
 ui = { group = "androidx.compose.ui", name = "ui" }
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
