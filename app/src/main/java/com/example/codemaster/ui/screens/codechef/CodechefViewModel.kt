@@ -2,9 +2,11 @@ package com.example.codemaster.ui.screens.codechef
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.codemaster.data.model.Codechef
 import com.example.codemaster.data.model.Response
 import com.example.codemaster.data.source.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -23,7 +25,7 @@ class CodechefViewModel @Inject constructor(
 
     fun fetchCodechefData(username : String) = viewModelScope.launch {
         try {
-            val result = repository.getCodechefData(username)
+            val result : Flow<Response<Codechef>?> = repository.getCodechefData(username)
             result.collect {
                 when(it) {
                     is Response.Loading<*> -> {

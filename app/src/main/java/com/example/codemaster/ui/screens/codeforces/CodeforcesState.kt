@@ -1,6 +1,7 @@
 package com.example.codemaster.ui.screens.codeforces
 
 import com.example.codemaster.data.model.Codeforces
+import com.example.codemaster.data.model.Response
 import com.example.codemaster.data.model.codeforces_model.UserInfo
 
 sealed class CodeforcesState{
@@ -11,6 +12,6 @@ sealed class CodeforcesState{
 }
 
 data class CodeforcesScreenData(
-    val userData : UserInfo,
-    val graphData: Codeforces
+    val userData : Response<UserInfo>,
+    val graphData: Response<Codeforces>
 )

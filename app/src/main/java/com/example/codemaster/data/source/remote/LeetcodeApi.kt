@@ -8,7 +8,7 @@ import retrofit2.http.Path
 
 interface LeetcodeApi {
     @GET("/{username}")
-    suspend fun getLeetcodeData(
+    suspend fun getLeetCodeData(
         @Path("username") username : String
-    ) : Flow<Response<Leetcode>>
+    ) : Response<Leetcode>?
 }

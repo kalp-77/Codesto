@@ -24,6 +24,8 @@ interface Repository {
     suspend fun saveCodechefUser(username: String?) : Flow<Response<String>>
     suspend fun saveCodeforcesUser(username: String?) : Flow<Response<String>>
     suspend fun saveLeetcodeUser(username: String?) : Flow<Response<String>>
+
+
     fun getCodechefUser() : Flow<String?>
     fun getCodeforcesUser() : Flow<String?>
     fun getLeetcodeUser() : Flow<String?>
