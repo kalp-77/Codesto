@@ -1,5 +1,6 @@
 package com.example.codemaster.ui.screens.codeforces
 
+import android.util.Log
 import android.widget.Space
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -44,6 +45,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.codemaster.data.model.Codeforces
+import com.example.codemaster.data.model.codeforces_model.RatingChangeResult
+import com.example.codemaster.data.model.codeforces_model.UserRatingChanges
 import com.example.codemaster.navigation.Screens
 import com.example.codemaster.utils.NavigateUI
 import com.madrapps.plot.line.DataPoint
@@ -210,7 +213,7 @@ fun CodeforcesDisplayScreen (
                     shape = RoundedCornerShape(10.dp),
                     elevation = CardDefaults.cardElevation(3.dp)
                 ) {
-                    CodeforcesGraph(graphData = data.graphData!!)
+                    CodeforcesGraph(graphData = data.ratingChange)
                 }
             }
         }
@@ -218,11 +221,13 @@ fun CodeforcesDisplayScreen (
 }
 
 @Composable
-fun CodeforcesGraph(graphData: Codeforces,){
+fun CodeforcesGraph(
+    graphData: UserRatingChanges
+){
     val mylist = mutableListOf<DataPoint>()
     var i = 0
-    for(j in graphData.contest.reversed()) {
-        mylist.add(DataPoint(i.toFloat(), j.toFloat()))
+    for(j in graphData.result) {
+        mylist.add(DataPoint(i.toFloat(), j.oldRating.toFloat()))
         i += 1
     }
     val lines: List<List<DataPoint>> = listOf(mylist)

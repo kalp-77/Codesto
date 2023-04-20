@@ -5,13 +5,14 @@ import com.example.codemaster.data.model.codeforces_model.UserInfo
 import com.example.codemaster.data.model.codeforces_model.UserRatingChanges
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Query
 
 interface CodeforcesOfficialApi {
 
     @GET("user.rating?")
     suspend fun getUserRatingChanges(
-        @Query("handle") handle : String
+        @Query("handle", encoded = true) handle : String
     ) : Response<UserRatingChanges>?
 
     @GET("problemset.problems?")
@@ -21,6 +22,6 @@ interface CodeforcesOfficialApi {
 
     @GET("user.info?")
     suspend fun getCodeforcesUserInfo(
-        @Query("handles") handle : String
+        @Query("handles", encoded = true) handle : String
     ) : Response<UserInfo>?
 }

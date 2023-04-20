@@ -1,7 +1,5 @@
 package com.example.codemaster.ui.screens.codechef
 
-import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -14,7 +12,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -31,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
-import com.example.codemaster.MyApplication
 import com.example.codemaster.data.model.Codechef
 import com.madrapps.plot.line.DataPoint
 import com.madrapps.plot.line.LineGraph
@@ -65,7 +61,6 @@ fun CodechefScreen(
             }
             is CodechefState.Failure ->{
                 Toast.makeText(LocalContext.current, state.message, Toast.LENGTH_LONG).show()
-                Log.d("kalpp", "CodechefScreen: ${state.message}")
 //                ErrorDialog(state.message)
             }
             is CodechefState.Success -> {

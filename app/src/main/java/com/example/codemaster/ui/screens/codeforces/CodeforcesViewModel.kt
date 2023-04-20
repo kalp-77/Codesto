@@ -29,11 +29,9 @@ class CodeforcesViewModel @Inject constructor(
 
     init{
         viewModelScope.launch {
-            viewModelScope.launch {
-                repository.getCodechefUser().collect {
-                    if(it != null) {
-                        fetchCodeforcesData(it)
-                    }
+            repository.getCodechefUser().collect {
+                if(it != null) {
+                    fetchCodeforcesData(it)
                 }
             }
         }
