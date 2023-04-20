@@ -3,8 +3,7 @@ package com.example.codemaster.data.source.remote
 import com.example.codemaster.data.model.codeforces_model.CodeforcesProblemset
 import com.example.codemaster.data.model.codeforces_model.UserInfo
 import com.example.codemaster.data.model.codeforces_model.UserRatingChanges
-import kotlinx.coroutines.flow.Flow
-import com.example.codemaster.data.model.Response
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 

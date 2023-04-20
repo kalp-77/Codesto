@@ -33,7 +33,7 @@ interface Repository {
 
     // Remote Api data
     /**  Codechef Api Data **/
-    suspend fun getCodechefData(userName : String) : Flow<Response<Codechef>?>
+    suspend fun getCodechefData(username : String) : Flow<Response<Codechef>?>
 
 
     /**  Codeforces Api Data **/
@@ -43,7 +43,7 @@ interface Repository {
 
 
     /**  Leetcode Api Data **/
-    suspend fun getLeetCodeData(userName: String) : Flow<Response<Leetcode>?>
+    suspend fun getLeetCodeData(username: String) : Flow<Response<Leetcode>?>
 
     /** All Contest Api Data **/
     suspend fun getAllContestData() : Flow<Response<Contest>?>

@@ -79,8 +79,8 @@ fun LoginScreen(
                 }
             }
             is Response.Success -> {
+                val userData = userDetailState.value?.data
                 LaunchedEffect(Unit) {
-                    val userData = userDetailState.value?.data
                     Toast.makeText(context, "Login successful", Toast.LENGTH_LONG).show()
                 }
             }

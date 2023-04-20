@@ -2,8 +2,6 @@ package com.example.codemaster.di.module
 
 import android.app.Application
 import android.content.Context
-import com.example.codemaster.data.source.repository.Repository
-import com.example.codemaster.data.source.repository.RepositoryImpl
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -51,7 +49,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideGsonConverterFactory(gson: Gson): GsonConverterFactory {
-        return GsonConverterFactory.create(gson)
+        return GsonConverterFactory
+            .create(gson)
+
     }
     @Provides
     @Singleton

@@ -1,38 +1,51 @@
-package com.example.codemaster.ui.screens.codechef
+package com.example.codemaster.ui.screens.codeforces
 
-import android.content.Intent
-import android.util.Log
+import android.widget.Space
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.rememberImagePainter
-import com.example.codemaster.MyApplication
-import com.example.codemaster.data.model.Codechef
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
+import com.example.codemaster.data.model.Codeforces
+import com.example.codemaster.navigation.Screens
+import com.example.codemaster.utils.NavigateUI
 import com.madrapps.plot.line.DataPoint
 import com.madrapps.plot.line.LineGraph
 import com.madrapps.plot.line.LinePlot
@@ -41,18 +54,32 @@ import com.madrapps.plot.line.LinePlot
 val font = FontFamily.SansSerif
 
 @Composable
-fun CodechefScreen(
-    //topBar : @Composable ()->Unit,
-    codechefViewModel: CodechefViewModel = hiltViewModel(),
+fun CodeforcesScreen(
+//    topBar : @Composable ()->Unit,
+    onNavigate: (route: Screens) -> Unit,
+    viewModel: CodeforcesViewModel = hiltViewModel()
 ) {
-    val heightInPx = with(LocalDensity.current) { LocalConfiguration.current
-        .screenHeightDp.dp.toPx()
+    val state = viewModel.uiState.collectAsState().value
+    LaunchedEffect(key1 = true) {
+        viewModel.uiEvents.collect {
+            when (it) {
+                is NavigateUI.Navigate -> {
+                    onNavigate(it.onNavigate)
+                }
+                is NavigateUI.Snackbar -> {
+
+                }
+                is NavigateUI.PopBackStack -> {
+
+                }
+            }
+
+        }
     }
-    Column {
+    Column{
         //topBar()
-        val state = codechefViewModel.uiState.collectAsState().value
-        when(state){
-            is CodechefState.Loading -> {
+        when (state) {
+            is CodeforcesState.Loading -> {
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
@@ -63,40 +90,41 @@ fun CodechefScreen(
                     )
                 }
             }
-            is CodechefState.Failure ->{
-                Toast.makeText(LocalContext.current, state.message, Toast.LENGTH_LONG).show()
-                Log.d("kalpp", "CodechefScreen: ${state.message}")
-//                ErrorDialog(state.message)
+            is CodeforcesState.Success ->{
+                CodeforcesDisplayScreen(state.data)
             }
-            is CodechefState.Success -> {
-                CodechefDisplayScreen(state.data)
+            is CodeforcesState.Failure -> {
+//                ErrorDialog(state.message)
+                Toast.makeText(LocalContext.current, state.message, Toast.LENGTH_LONG).show()
             }
             else -> {}
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CodechefDisplayScreen(
-    data : Codechef
-){
+fun CodeforcesDisplayScreen (
+    data : CodeforcesScreenData,
+    viewModel: CodeforcesViewModel = hiltViewModel()
+) {
     Box(
         modifier = Modifier
             .background(Color(0xFFEEF0FD))
             .fillMaxSize()
     ){
         Column(modifier = Modifier.padding(10.dp)) {
-            Row(modifier = Modifier.padding(10.dp)) {
+            Row(modifier = Modifier.padding(10.dp) ){
                 Card(
                     modifier = Modifier
                         .fillMaxWidth(),
                     elevation = CardDefaults.cardElevation(3.dp),
-                    shape = RoundedCornerShape(10.dp),
+                    shape = RoundedCornerShape(10.dp)
                 ) {
-                    Column(modifier = Modifier.padding(10.dp)) {
+                    Column(modifier = Modifier.padding(10.dp) ) {
                         Row() {
                             Column(modifier = Modifier.padding(10.dp)) {
-                               val painter = rememberImagePainter(data = data.avatar)
+                                val painter = rememberAsyncImagePainter(model = data.userData.result[0].avatar)
                                 Image(
                                     painter = painter,
                                     contentDescription = "Profile_picture",
@@ -106,46 +134,25 @@ fun CodechefDisplayScreen(
                             }
                             Column(modifier = Modifier.padding(10.dp)) {
                                 Text(
-                                    text = "@${data.username}",
+                                    text = "@${data.userData.result[0].handle}",
                                     fontWeight = FontWeight.ExtraBold,
                                     color = Color(0xFF2A265C),
                                     fontFamily = font,
-                                    fontSize = 15.sp,
+                                    fontSize = 15.sp
                                 )
-                                Row {
-                                    Text(
-                                        text = data.div,
-                                        modifier = Modifier.padding(end = 15.dp),
-                                        fontFamily = font,
-                                        color = Color(0xFF2A265C),
-                                    )
-                                    Text(
-                                        text = data.stars,
-                                        color =
-                                        if (data.rating < "1400") Color(0xFF666666)
-                                        else if (data.rating < "1600" && data.rating >= "1400")
-                                            Color(0xFF1E7D22)
-                                        else if (data.rating < "1800" && data.rating >= "1600")
-                                            Color(0xFF3366CB)
-                                        else if (data.rating < "2000" && data.rating >= "1800")
-                                            Color(0xFF684273)
-                                        else if (data.rating < "2200" && data.rating >= "2000")
-                                            Color(0xFFFEBE00)
-                                        else if (data.rating < "2500" && data.rating >= "2200")
-                                            Color(0xFFFE7F00)
-                                        else
-                                            Color.Red,
-                                        fontFamily = font
-                                    )
-                                }
                                 Text(
-                                    text = "Max Rating: ${data.max_rating}",
+                                    text = data.userData.result[0].rank,
                                     fontFamily = font,
                                     color = Color(0xFF2A265C),
                                 )
                                 Text(
-                                    text = "Rating: ${data.rating}",
+                                    text = "Max Rating: ${data.userData.result[0].rating}",
                                     fontFamily = font,
+                                    color = Color(0xFF2A265C),
+                                )
+                                Text(
+                                    text = "Rating: ${data.userData.result[0].maxRating}",
+                                    fontFamily = FontFamily.SansSerif, // font
                                     color = Color(0xFF2A265C),
                                 )
                             }
@@ -153,26 +160,45 @@ fun CodechefDisplayScreen(
                     }
                 }
             }
-            Row(modifier = Modifier.padding(10.dp)){
-                val url = "https://www.codechef.com/practice?end_rating=999&group=all&hints=0&itm_campaign=problems&itm_medium=home&limit=20&page=0&search=&sort_by=difficulty_rating&sort_order=asc&start_rating=0&tags=&topic=&video_editorial=0&wa_enabled=0"
+            Row(modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ){
                 Card(
                     modifier = Modifier
                         .height(80.dp)
-                        .fillMaxWidth(),
+                        .width(140.dp),
+                    elevation = CardDefaults.cardElevation(3.dp),
                     onClick = {
-//                        val myIntent = Intent(MyApplication.instance, WebViewActivity::class.java)
-//                        myIntent.putExtra("key", url)
-//                        myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                        MyApplication.instance.startActivity(myIntent)
+                        viewModel.onEvent(NavigateUI.Navigate(Screens.ProblemsetScreen))
                     },
-                    shape = RoundedCornerShape(10.dp),
-                    elevation = CardDefaults.cardElevation(3.dp)
+                    shape = RoundedCornerShape(10.dp)
                 ) {
                     Text(
                         text = "PROBLEMS",
                         textAlign = TextAlign.Center,
                         modifier = Modifier.wrapContentSize(),
-                        fontFamily = font,
+                        fontFamily = FontFamily.SansSerif, // font
+                        color = Color(0xFF2A265C),
+                    )
+                }
+                Card(
+                    modifier = Modifier
+                        .height(80.dp)
+                        .width(140.dp),
+                    onClick = {
+                        viewModel.onEvent(NavigateUI.Navigate(Screens.RatingChangeScreen))
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    elevation = CardDefaults.cardElevation(3.dp)
+                ) {
+                    Text(
+                        text = "RATINGS",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.wrapContentSize(),
+                        fontFamily = FontFamily.SansSerif, // font
                         color = Color(0xFF2A265C),
                     )
                 }
@@ -181,10 +207,10 @@ fun CodechefDisplayScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(3.dp),
-                    shape = RoundedCornerShape(10.dp)
+                    shape = RoundedCornerShape(10.dp),
+                    elevation = CardDefaults.cardElevation(3.dp)
                 ) {
-                    CodechefGraph(data = data)
+                    CodeforcesGraph(graphData = data.graphData!!)
                 }
             }
         }
@@ -192,14 +218,13 @@ fun CodechefDisplayScreen(
 }
 
 @Composable
-fun CodechefGraph(data:Codechef){
+fun CodeforcesGraph(graphData: Codeforces,){
     val mylist = mutableListOf<DataPoint>()
     var i = 0
-    for(j in data.contests) {
+    for(j in graphData.contest.reversed()) {
         mylist.add(DataPoint(i.toFloat(), j.toFloat()))
         i += 1
     }
-
     val lines: List<List<DataPoint>> = listOf(mylist)
     LineGraph(
         plot = LinePlot(
@@ -225,7 +250,7 @@ fun CodechefGraph(data:Codechef){
                 highlight = LinePlot.Connection(
                     Color.Black,
                     strokeWidth = 3.dp,
-                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 20f))
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 15f))
                 ),
                 detectionTime = 50
             ),

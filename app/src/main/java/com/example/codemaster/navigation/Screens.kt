@@ -7,6 +7,9 @@ sealed class Screens(val route: String) {
     object HomeScreen : Screens(route = "Home_Screen")
     object CodechefScreen : Screens(route = "Codechef_Screen")
     object CodeforcesScreen : Screens(route = "Codeforces_Screen")
+    object ProblemsetScreen : Screens(route = "Problemset_Screen")
+    object RatingChangeScreen : Screens(route = "Rating_Change_Screen")
+
 
 
 }

@@ -73,8 +73,8 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
-    implementation(libs.firebase.auth.ktx)
-    implementation(libs.firebase.database.ktx)
+//    implementation(libs.firebase.auth.ktx)
+//    implementation(libs.firebase.database.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -105,8 +105,17 @@ dependencies {
     implementation("com.github.madrapps:plot:0.1.2")
 
     //retrofit
-    implementation(libs.gson)
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
+    // coil glide shimmer
+    implementation ("com.valentinilk.shimmer:compose-shimmer:1.0.4")
+    implementation ("io.coil-kt:coil-compose:2.3.0")
+    implementation ("com.github.skydoves:landscapist-glide:2.1.10")
+
+    implementation("com.google.firebase:firebase-auth-ktx:21.3.0")
+
+    // Firebase Realtime Database
+    implementation("com.google.firebase:firebase-database-ktx:20.2.0")
 }

@@ -15,15 +15,15 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
-import kotlinx.coroutines.channels.awaitClose
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.snapshots
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -77,122 +77,61 @@ class RepositoryImpl @Inject constructor(
 
     /** Firebase database repository implementation **/
 
-    override suspend fun saveCodechefUser(username: String?): Flow<Response<String>> =
-        callbackFlow {
-            trySend(Response.Loading())
-            db.child(firebaseAuth.currentUser?.uid.toString()).child("codechef").setValue(
-                username
-            ).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    trySend(Response.Success("codechef username saved"))
-                }
-            }.addOnFailureListener {
-                trySend(Response.Failure(it.toString()))
-            }
-            awaitClose {
-                close()
-            }
-        }
-
-    override suspend fun saveCodeforcesUser(username: String?): Flow<Response<String>> =
-        callbackFlow {
-            trySend(Response.Loading())
-            db.child(firebaseAuth.currentUser?.uid.toString()).child("codeforces").setValue(
-                username
-            ).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    trySend(Response.Success("codeforces username saved"))
-                }
-            }.addOnFailureListener {
-                trySend(Response.Failure(it.toString()))
-            }
-            awaitClose {
-                close()
-            }
-        }
-
-    override suspend fun saveLeetcodeUser(username: String?): Flow<Response<String>> =
-        callbackFlow {
-            trySend(Response.Loading())
-            db.child(firebaseAuth.currentUser?.uid.toString()).child("leetcode").setValue(
-                username
-            ).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    trySend(Response.Success("leetcode username saved"))
-                }
-            }.addOnFailureListener {
-                trySend(Response.Failure(it.toString()))
-            }
-            awaitClose {
-                close()
-            }
-        }
-
-    override fun getCodechefUser(): Flow<String?> = callbackFlow {
-        val valueEvent = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val codechefUser = snapshot.child(firebaseAuth.currentUser?.uid.toString())
-                    .child("codechef").value.toString()
-                trySend(codechefUser)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                trySend(error.message)
-            }
-        }
-        db.addValueEventListener(valueEvent)
-
-        awaitClose {
-            db.removeEventListener(valueEvent)
-            close()
+    override suspend fun saveCodechefUser(username: String?): Flow<Response<String>> = flow {
+        try {
+            emit(Response.Loading())
+            db.child(firebaseAuth.currentUser?.uid.toString()).child("codechef")
+                .setValue(username).await()
+            emit(Response.Success("codechef username saved"))
+        } catch (e: Exception) {
+            emit(Response.Failure(e.toString()))
         }
     }
 
-    override fun getCodeforcesUser(): Flow<String?> = callbackFlow {
-        val valueEvent = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val codeforcesUser = snapshot.child(firebaseAuth.currentUser?.uid.toString())
-                    .child("codeforces").value.toString()
-                trySend(codeforcesUser)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                trySend(error.message)
-            }
-        }
-        db.addValueEventListener(valueEvent)
-
-        awaitClose {
-            db.removeEventListener(valueEvent)
-            close()
+    override suspend fun saveCodeforcesUser(username: String?): Flow<Response<String>> = flow {
+        try {
+            emit(Response.Loading())
+            db.child(firebaseAuth.currentUser?.uid.toString()).child("codeforces").setValue(username).await()
+            emit(Response.Success("codeforces username saved"))
+        } catch (e: Exception) {
+            emit(Response.Failure(e.toString()))
         }
     }
 
-    override fun getLeetcodeUser(): Flow<String?> = callbackFlow {
-        val valueEvent = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val leetcodeUser = snapshot.child(firebaseAuth.currentUser?.uid.toString())
-                    .child("leetcode").value.toString()
-                trySend(leetcodeUser)
-            }
 
-            override fun onCancelled(error: DatabaseError) {
-                trySend(error.message)
-            }
-        }
-        db.addValueEventListener(valueEvent)
-
-        awaitClose {
-            db.removeEventListener(valueEvent)
-            close()
+    override suspend fun saveLeetcodeUser(username: String?): Flow<Response<String>> = flow {
+        try {
+            emit(Response.Loading())
+            db.child(firebaseAuth.currentUser?.uid.toString()).child("leetcode").setValue(username).await()
+            emit(Response.Success("leetcode username saved"))
+        } catch (e: Exception) {
+            emit(Response.Failure(e.toString()))
         }
     }
 
-    override suspend fun getCodechefData(userName: String): Flow<Response<Codechef>?> {
+    override fun getCodechefUser(): Flow<String?> {
+        return db.child(firebaseAuth.currentUser?.uid.toString()).child("codechef").snapshots.map {
+            it.value.toString()
+        }
+    }
+
+    override fun getCodeforcesUser(): Flow<String?> {
+        return db.child(firebaseAuth.currentUser?.uid.toString()).child("codeforces").snapshots.map {
+            it.value.toString()
+        }
+    }
+
+    override fun getLeetcodeUser(): Flow<String?> {
+        return db.child(firebaseAuth.currentUser?.uid.toString()).child("leetcode").snapshots.map {
+            it.value.toString()
+        }
+    }
+
+    override suspend fun getCodechefData(username: String): Flow<Response<Codechef>?> {
         return flow<Response<Codechef>?> {
             emit(Response.Loading())
-            val data = cfccApi.getCodechefData(userName)
-            emit(Response.Success(data = data?.data))
+            val data = cfccApi.getCodechefData(username)?.body()
+            emit(Response.Success(data = data))
         }.catch {
             emit(Response.Failure(it.message.toString()))
         }
@@ -201,10 +140,10 @@ class RepositoryImpl @Inject constructor(
 
     /** Codeforces Screen Implementation **/
     override suspend fun getCodeforcesScreenData(username: String): Flow<Response<CodeforcesScreenData>?> {   // graphData + userInfo
-        return flow<Response<CodeforcesScreenData>?> {
+        return flow {
             emit(Response.Loading())
-            val data = codeforcesApi.getCodeforcesUserInfo(username)
-            val graphData = cfccApi.getCodeforcesData(username)
+            val data = codeforcesApi.getCodeforcesUserInfo(username)?.body()
+            val graphData = cfccApi.getCodeforcesData(username)?.body()
             emit(Response.Success(data = CodeforcesScreenData(data!!, graphData!!)))
         }.catch {
             emit(Response.Failure(it.message.toString()))
@@ -214,8 +153,8 @@ class RepositoryImpl @Inject constructor(
     override suspend fun getCodeforcesUserRatingChange(username: String): Flow<Response<UserRatingChanges>?> {
         return  flow{
             emit(Response.Loading())
-            val data = codeforcesApi.getUserRatingChanges(username)
-            emit(Response.Success(data?.data))
+            val data = codeforcesApi.getUserRatingChanges(username)?.body()
+            emit(Response.Success(data))
         }.catch {
             emit(Response.Failure(it.message.toString()))
         }
@@ -224,18 +163,18 @@ class RepositoryImpl @Inject constructor(
     override suspend fun getCodeforcesProblemset(tags: String): Flow<Response<CodeforcesProblemset>?> {
         return flow{
             emit(Response.Loading())
-            val data = codeforcesApi.getUserProblemset(tags)
-            emit(Response.Success(data = data?.data))
+            val data = codeforcesApi.getUserProblemset(tags)?.body()
+            emit(Response.Success(data = data))
         } .catch {
             emit(Response.Failure(it.message.toString()))
         }
     }
 
-    override suspend fun getLeetCodeData(userName: String): Flow<Response<Leetcode>?> {
+    override suspend fun getLeetCodeData(username: String): Flow<Response<Leetcode>?> {
         return flow{
             emit(Response.Loading())
-            val data = leetcodeApi.getLeetCodeData(userName)
-            emit(Response.Success(data?.data))
+            val data = leetcodeApi.getLeetCodeData(username)?.body()
+            emit(Response.Success(data))
         }.catch {
             emit(Response.Failure(it.message.toString()))
         }
@@ -244,8 +183,8 @@ class RepositoryImpl @Inject constructor(
     override suspend fun getAllContestData(): Flow<Response<Contest>?> {
         return flow{
             emit(Response.Loading())
-            val data = contestApi.getContestDetailsData()
-            emit(Response.Success(data = data?.data))
+            val data = contestApi.getContestDetailsData()?.body()
+            emit(Response.Success(data = data))
         }.catch {
             emit(Response.Failure(it.message.toString()))
         }

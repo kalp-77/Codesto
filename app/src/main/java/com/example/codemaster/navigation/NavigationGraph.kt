@@ -1,17 +1,24 @@
 package com.example.codemaster.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.codemaster.ui.screens.codechef.CodechefScreen
+import com.example.codemaster.ui.screens.codeforces.CodeforcesScreen
 import com.example.codemaster.ui.screens.home.HomeScreen
 import com.example.codemaster.ui.screens.login.LoginScreen
+import com.example.codemaster.ui.screens.login.LoginViewModel
 import com.example.codemaster.ui.screens.platform.PlatformScreen
+import com.example.codemaster.ui.screens.platform.PlatformViewModel
 import com.example.codemaster.ui.screens.signup.SignupScreen
 
 @Composable
 fun NavigationGraph(
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: PlatformViewModel = hiltViewModel()
 ) {
     NavHost(
         navController = navController,
@@ -49,13 +56,25 @@ fun NavigationGraph(
             )
         }
         composable(route = Screens.HomeScreen.route) {
-            HomeScreen()
+            HomeScreen(
+                onNavigate = {
+                    navController.navigate(it.route) {
+                        popUpTo(it.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
         composable(route = Screens.CodechefScreen.route) {
-//            CodechefScreen()
+            CodechefScreen()
         }
         composable(route = Screens.CodeforcesScreen.route) {
-//            Co
+            CodeforcesScreen(
+                onNavigate = {
+                    navController.navigate(it.route)
+                }
+            )
         }
     }
 }

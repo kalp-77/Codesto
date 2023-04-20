@@ -1,9 +1,11 @@
 package com.example.codemaster.ui.screens.codeforces
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.codemaster.data.model.Response
 import com.example.codemaster.data.source.repository.Repository
+import com.example.codemaster.utils.NavigateUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,23 +24,25 @@ class CodeforcesViewModel @Inject constructor(
     val uiState : StateFlow<CodeforcesState> = _uiState
 
     // handle events send by the ui layer
-    private val _uiEvents = Channel<CodeforcesUiEvents>()
+    private val _uiEvents = Channel<NavigateUI>()
     val uiEvents = _uiEvents.receiveAsFlow()
 
-    fun processEvent(event : CodeforcesUiEvents) = viewModelScope.launch {
-        when(event){
-            is CodeforcesUiEvents.onProblemsClick -> {
-                _uiState.value = CodeforcesState.Navigate(screen = "Rating_Change_Screen")
-            }
-            is CodeforcesUiEvents.onRatingClick -> {
-                _uiState.value = CodeforcesState.Navigate(screen = "Problemset_Screen")
+    init{
+        viewModelScope.launch {
+            viewModelScope.launch {
+                repository.getCodechefUser().collect {
+                    if(it != null) {
+                        fetchCodeforcesData(it)
+                    }
+                }
             }
         }
-    }
 
+    }
     fun fetchCodeforcesData(username : String) = viewModelScope.launch {
         try{
-            val ratingGraphData = repository.getCodeforcesScreenData(username).collect {
+            val data = repository.getCodeforcesScreenData(username)  // data = codeforcesScreenData : (userInfo + graphData)
+            data.collect {
                 when(it) {
                     is Response.Loading -> {
                         _uiState.value = CodeforcesState.Loading
@@ -49,7 +53,6 @@ class CodeforcesViewModel @Inject constructor(
                     is Response.Failure -> {
                         _uiState.value = CodeforcesState.Failure(it.message.toString())
                     }
-
                     else -> {}
                 }
             }
@@ -57,6 +60,10 @@ class CodeforcesViewModel @Inject constructor(
         catch (e:Exception) {
             _uiState.value = CodeforcesState.Failure("Oops! Something went wrong")
         }
+    }
+
+    fun onEvent(event : NavigateUI) = viewModelScope.launch {
+        _uiEvents.send(event)
     }
 
 }

@@ -1,8 +1,7 @@
 package com.example.codemaster.data.source.remote
 
 import com.example.codemaster.data.model.Leetcode
-import com.example.codemaster.data.model.Response
-import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 

@@ -12,6 +12,6 @@ sealed class CodeforcesState{
 }
 
 data class CodeforcesScreenData(
-    val userData : Response<UserInfo>,
-    val graphData: Response<Codeforces>
+    val userData : UserInfo,
+    val graphData: Codeforces
 )
