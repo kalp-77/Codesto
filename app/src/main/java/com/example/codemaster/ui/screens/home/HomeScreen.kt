@@ -39,7 +39,7 @@ fun HomeScreen(
         shape = RoundedCornerShape(15.dp)
     ) {
         Text(
-            text = "Log in",
+            text = "Log out",
             color = Color.White,
             modifier = Modifier
                 .padding(7.dp),

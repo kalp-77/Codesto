@@ -82,7 +82,7 @@ fun SignupScreen (
             shape = RoundedCornerShape(8.dp),
             singleLine = true,
             placeholder = {
-                Text(text = "Email")
+                Text(text = "Name")
             }
         )
         Spacer(modifier = Modifier.height(16.dp))
