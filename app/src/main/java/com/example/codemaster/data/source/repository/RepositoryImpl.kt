@@ -164,7 +164,7 @@ class RepositoryImpl @Inject constructor(
     override suspend fun getCodeforcesProblemset(tags: String): Flow<Response<CodeforcesProblemset>?> {
         return flow{
             emit(Response.Loading())
-            val data = codeforcesApi.getUserProblemset(tags)?.body()
+            val data = codeforcesApi.getUserProblemset(tags)?.body()!!
             emit(Response.Success(data = data))
         } .catch {
             emit(Response.Failure(it.message.toString()))
@@ -175,6 +175,7 @@ class RepositoryImpl @Inject constructor(
         return flow{
             emit(Response.Loading())
             val data = leetcodeApi.getLeetCodeData(username)?.body()
+
             emit(Response.Success(data))
         }.catch {
             emit(Response.Failure(it.message.toString()))

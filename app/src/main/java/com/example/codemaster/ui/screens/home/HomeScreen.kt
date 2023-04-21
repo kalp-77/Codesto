@@ -95,9 +95,7 @@ fun HomeScreen(
         }
         Button(
             onClick = {
-                scope.launch {
-                    viewModel.onEvent(NavigateUI.Navigate(Screens.CodeforcesScreen))
-                }
+                viewModel.onEvent(NavigateUI.Navigate(Screens.CodeforcesScreen))
             },
             modifier = Modifier
                 .fillMaxWidth()

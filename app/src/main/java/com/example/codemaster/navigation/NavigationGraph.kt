@@ -1,5 +1,6 @@
 package com.example.codemaster.navigation
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -8,6 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.codemaster.ui.screens.codechef.CodechefScreen
 import com.example.codemaster.ui.screens.codeforces.CodeforcesScreen
+import com.example.codemaster.ui.screens.codeforces_problemset.ProblemsetScreen
+import com.example.codemaster.ui.screens.codeforces_ratingchange.RatingChangeScreen
 import com.example.codemaster.ui.screens.home.HomeScreen
 import com.example.codemaster.ui.screens.login.LoginScreen
 import com.example.codemaster.ui.screens.login.LoginViewModel
@@ -15,6 +18,7 @@ import com.example.codemaster.ui.screens.platform.PlatformScreen
 import com.example.codemaster.ui.screens.platform.PlatformViewModel
 import com.example.codemaster.ui.screens.signup.SignupScreen
 
+@SuppressLint("NewApi")
 @Composable
 fun NavigationGraph(
     navController: NavHostController,
@@ -75,6 +79,12 @@ fun NavigationGraph(
                     navController.navigate(it.route)
                 }
             )
+        }
+        composable(route = Screens.ProblemsetScreen.route) {
+            ProblemsetScreen()
+        }
+        composable(route = Screens.RatingChangeScreen.route) {
+            RatingChangeScreen()
         }
     }
 }
