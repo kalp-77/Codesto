@@ -1,6 +1,8 @@
 package com.example.codemaster.navigation
 
+import android.graphics.drawable.Icon
 import com.example.codemaster.R
+
 
 sealed class Screens(val route: String) {
     object LoginScreen : Screens(route = "Login_Screen")
@@ -21,9 +23,9 @@ sealed class BottomNavScreens(
     val route: String
 ){
     object ContestsScreen : BottomNavScreens(icon = R.drawable.icons_contests, route = "Contests_Screen")
-    object CodechefScreen : BottomNavScreens(icon = R.drawable.icons_codechef, route = "Contests_Screen")
-    object CodeforcesScreen : BottomNavScreens(icon = R.drawable.icons_codeforces, route = "Contests_Screen")
-    object LeetcodeScreen : BottomNavScreens(icon = R.drawable.icons_leetcode, route = "Contests_Screen")
+    object CodechefScreen : BottomNavScreens(icon = R.drawable.icons_codechef, route = "Codechef_Screen")
+    object CodeforcesScreen : BottomNavScreens(icon = R.drawable.icons_codeforces, route = "Codeforces_Screen")
+    object LeetcodeScreen : BottomNavScreens(icon = R.drawable.icons_leetcode, route = "Leetcode_Screen")
 
 
 }

@@ -1,4 +1,4 @@
-package com.example.codemaster.ui.screens.contests
+package com.example.codemaster.ui.screens.home
 
 import android.content.Intent
 import android.os.Build
@@ -40,16 +40,15 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun OngoingContestsScreen(
-    contestViewModel: ContestViewModel = hiltViewModel()
+fun FutureContestsScreen(
+    viewModel: HomeViewModel = hiltViewModel()
 ){
     Column {
-        val state = contestViewModel.uiState.collectAsState().value
+        val state = viewModel.uiState.collectAsState().value
         when(state){
-            is ContestState.Loading -> {
+            is HomeState.Loading -> {
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
@@ -60,11 +59,11 @@ fun OngoingContestsScreen(
                     )
                 }
             }
-            is ContestState.Failure -> {
+            is HomeState.Failure -> {
                 Toast.makeText(LocalContext.current, state.message, Toast.LENGTH_LONG).show()
             }
-            is ContestState.Success -> {
-                OngoingContestsDisplayScreen(data = state.data)
+            is HomeState.Success -> {
+                FutureContestsDisplayScreen(data = state.data)
             }
         }
     }
@@ -72,10 +71,10 @@ fun OngoingContestsScreen(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun OngoingContestsDisplayScreen(
-    data : Contest,
-){
-    val list = data.filter {  it.status == "CODING" }
+fun FutureContestsDisplayScreen(
+    data: Contest
+) {
+    val list = data.filter {  it.status == "BEFORE" }
     if(list.isEmpty()){
 //        Nul("No Upcoming Contests!")
     }
@@ -85,17 +84,14 @@ fun OngoingContestsDisplayScreen(
             .padding(bottom = 52.dp)
     ) {
         items(list){
-            OngoingCard(data = it)
+            FutureCard(data = it)
         }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun OngoingCard(
-    data: ContestItem,
-//    intent: Intent
-) {
+fun FutureCard(data: ContestItem) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -105,7 +101,7 @@ fun OngoingCard(
             color = Color(0xFFF3F3F3),
             thickness = 2.dp
         )
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(0.dp))
         Row(
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
@@ -206,4 +202,3 @@ fun OngoingCard(
         }
     }
 }
-

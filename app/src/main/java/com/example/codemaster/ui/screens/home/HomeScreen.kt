@@ -1,191 +1,216 @@
 package com.example.codemaster.ui.screens.home
 
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCompositionContext
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
-import com.example.codemaster.components.BottomNav
-import com.example.codemaster.components.BottomNavGraph
-import com.example.codemaster.data.model.Codechef
-import com.example.codemaster.navigation.BottomNavScreens
-import com.example.codemaster.navigation.NavigationGraph
-import com.example.codemaster.navigation.Screens
-import com.example.codemaster.ui.screens.codechef.CodechefViewModel
-import com.example.codemaster.ui.screens.login.LoginViewModel
-import com.example.codemaster.utils.NavigateUI
-import kotlinx.coroutines.launch
+import com.example.codemaster.MyApplication
+import com.example.codemaster.R
+import com.example.codemaster.WebViewActivity
+import com.example.codemaster.data.model.Contest
+import com.example.codemaster.data.model.ContestItem
+import java.text.SimpleDateFormat
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
-@OptIn(ExperimentalMaterial3Api::class)
+val font = FontFamily.SansSerif
+
 @RequiresApi(Build.VERSION_CODES.O)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
-    onNavigate: (route: Screens)-> Unit,
-    viewModel: HomeViewModel = hiltViewModel(),
-) {
-    val scope = rememberCoroutineScope()
-    LaunchedEffect(key1 = true) {
-        viewModel.uiEvents.collect {
-            when(it) {
-                is NavigateUI.Navigate -> {
-                    onNavigate(it.onNavigate)
+    viewModel: HomeViewModel = hiltViewModel()
+){
+    Column {
+        val state = viewModel.uiState.collectAsState().value
+        when(state){
+            is HomeState.Loading -> {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator(
+                        color = Color(0xFFB3BCF8)
+                    )
                 }
-                is NavigateUI.Snackbar -> {
-
-                }
-                is NavigateUI.PopBackStack-> {
-
-                }
+            }
+            is HomeState.Failure -> {
+                Toast.makeText(LocalContext.current, state.message, Toast.LENGTH_LONG).show()
+            }
+            is HomeState.Success -> {
+                ContestsDisplayScreen(data = state.data)
             }
         }
     }
-//    val navController = rememberNavController()
-//    NavigationGraph(navController)
-//
-//    val bottomNavigationItems = listOf(
-//        BottomNavScreens.ContestsScreen,
-//        BottomNavScreens.CodechefScreen,
-//        BottomNavScreens.CodeforcesScreen,
-//        BottomNavScreens.LeetcodeScreen
-//    )
-//    Scaffold(
-//        bottomBar = { BottomNav(navController = navController, items = bottomNavigationItems ) },
-//    ) {
-//        BottomNavGraph(navController)
-//    }
-    Column {
-        Button(
-            onClick = {
-                scope.launch {
-                    viewModel.logout()
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 3.dp, end = 3.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Black,
-                contentColor = Color.White,
-            ),
-            shape = RoundedCornerShape(15.dp)
-        ) {
-            Text(
-                text = "Log out",
-                color = Color.White,
-                modifier = Modifier
-                    .padding(7.dp),
-                fontSize = 16.sp
-            )
-        }
-        Button(
-            onClick = {
-                scope.launch {
-                    viewModel.onEvent(NavigateUI.Navigate(Screens.CodechefScreen))
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 3.dp, end = 3.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Black,
-                contentColor = Color.White,
-            ),
-            shape = RoundedCornerShape(15.dp)
-        ) {
-            Text(
-                text = "codechef",
-                color = Color.White,
-                modifier = Modifier
-                    .padding(7.dp),
-                fontSize = 16.sp
-            )
-        }
-        Button(
-            onClick = {
-                viewModel.onEvent(NavigateUI.Navigate(Screens.CodeforcesScreen))
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 3.dp, end = 3.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Black,
-                contentColor = Color.White,
-            ),
-            shape = RoundedCornerShape(15.dp)
-        ) {
-            Text(
-                text = "codeforces",
-                color = Color.White,
-                modifier = Modifier
-                    .padding(7.dp),
-                fontSize = 16.sp
-            )
-        }
-        Button(
-            onClick = {
-                scope.launch {
-                    viewModel.onEvent(NavigateUI.Navigate(Screens.LeetcodeScreen))
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 3.dp, end = 3.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Black,
-                contentColor = Color.White,
-            ),
-            shape = RoundedCornerShape(15.dp)
-        ) {
-            Text(
-                text = "leetcode",
-                color = Color.White,
-                modifier = Modifier
-                    .padding(7.dp),
-                fontSize = 16.sp
-            )
-        }
-        Button(
-            onClick = {
-                scope.launch {
-                    viewModel.onEvent(NavigateUI.Navigate(Screens.ContestsScreen))
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 3.dp, end = 3.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.Black,
-                contentColor = Color.White,
-            ),
-            shape = RoundedCornerShape(15.dp)
-        ) {
-            Text(
-                text = "contests",
-                color = Color.White,
-                modifier = Modifier
-                    .padding(7.dp),
-                fontSize = 16.sp
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ContestsDisplayScreen(
+    data: Contest
+){
+    val list = data.filter { it.in_24_hours == "Yes" }
+    if(list.isEmpty()){
+//        Nul("No Upcoming Contests!")
+    }
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 52.dp)
+    ) {
+        items( list ) {
+            ContestCard(
+                data = it,
             )
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ContestCard(
+    data: ContestItem
+){
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+    ){
+        Divider(
+            modifier = Modifier.fillMaxSize(1f),
+            color = Color(0xFFF3F3F3),
+            thickness = 2.dp
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ){
+            Column(
+                modifier = Modifier
+                    .padding(15.dp)
+                    .width(250.dp)
+                    .clickable {
+                        val myIntent = Intent(MyApplication.instance, WebViewActivity::class.java)
+                        myIntent.putExtra("key", data.url)
+                        myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        MyApplication.instance.startActivity(myIntent)
+                    }
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    val painter: Painter
+                    if(data.site == "CodeChef")
+                        painter = painterResource(id = R.drawable.icons_codechef)
+                    else if(data.site == "CodeForces")
+                        painter = painterResource(id = R.drawable.icons_codeforces)
+                    else if(data.site == "LeetCode")
+                        painter = painterResource(id = R.drawable.icons_leetcode)
+                    else if(data.site == "HackerRank")
+                        painter = painterResource(id = R.drawable.icons_hackerrank)
+                    else if(data.site == "HackerEarth")
+                        painter = painterResource(id = R.drawable.icons_hackerearth)
+                    else if(data.site == "AtCoder")
+                        painter = painterResource(id = R.drawable.icons_atcoder)
+                    else
+                        painter = painterResource(id = R.drawable.icons_google)
+                    Image(
+                        painter = painter,
+                        contentDescription = "logo",
+                    )
+                    Text(
+                        text = data.site,
+                        modifier = Modifier.padding(8.dp),
+                        fontFamily = font
+                    )
+                }
+                Text(
+                    text = data.name,
+                    fontWeight = Bold,
+                    fontFamily = font
+                )
+                //date
+                if(data.site == "CodeChef") {
+                    data.start_time.toDate()?.let {
+                        Text(
+                            text =  it.formatTo("dd MMM, yyyy"),
+                            fontFamily = font
+                        )
+                    }
+                }
+                else {
+                    val odt = OffsetDateTime.parse(data.start_time)
+                    val dtf = DateTimeFormatter.ofPattern("dd MMM, uuuu", Locale.ENGLISH)
+                    Text(
+                        text = dtf.format(odt),
+                        fontFamily = font
+                    )
+                }
+                //no. of hours
+                val x = (data.duration).toIntOrNull()
+                val length = x?.div(3600)
+                if(length != null){
+                    Text(
+                        text = "Duration : ${length.toString()} hrs",
+                        fontFamily = font
+                    )
+                }
+            }
+            Column(
+                modifier = Modifier.width(100.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ){
+                Image(
+                    painter = painterResource(id = R.drawable.icons_alarm),
+                    contentDescription = "Reminder",
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .align(Alignment.CenterHorizontally)
+                )
+            }
+        }
+    }
+}
+
+fun String.toDate(dateFormat: String = "yyyy-MM-dd HH:mm:ss", timeZone: TimeZone = TimeZone.getTimeZone("UTC")): Date? {
+    val parser = SimpleDateFormat(dateFormat, Locale.getDefault())
+    parser.timeZone = timeZone
+    return parser.parse(this)
+}
+fun Date.formatTo(dateFormat: String, timeZone: TimeZone = TimeZone.getDefault()): String {
+    val formatter = SimpleDateFormat(dateFormat, Locale.getDefault())
+    formatter.timeZone = timeZone
+    return formatter.format(this)
 }

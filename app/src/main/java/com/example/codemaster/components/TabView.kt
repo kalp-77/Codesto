@@ -5,8 +5,9 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -14,9 +15,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.codemaster.ui.screens.contests.ContestsScreen
-import com.example.codemaster.ui.screens.contests.FutureContestsScreen
-import com.example.codemaster.ui.screens.contests.OngoingContestsScreen
+import com.example.codemaster.ui.screens.home.FutureContestsScreen
+import com.example.codemaster.ui.screens.home.HomeScreen
+import com.example.codemaster.ui.screens.home.OngoingContestsScreen
 import com.example.codemaster.ui.screens.leetcode.font
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
@@ -53,7 +54,7 @@ fun Tabs(pagerState: PagerState) {
     val scope = rememberCoroutineScope()
 
     // Tab row
-    androidx.compose.material3.ScrollableTabRow(
+    ScrollableTabRow(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Unspecified),
@@ -111,7 +112,7 @@ fun TabsContent(
     HorizontalPager(state = pagerState, count = 3) { page ->
         when (page) {
             0 -> OngoingContestsScreen()
-            1 -> ContestsScreen()
+            1 -> HomeScreen()
             2 -> FutureContestsScreen()
         }
     }

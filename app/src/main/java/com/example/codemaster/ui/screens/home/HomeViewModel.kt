@@ -2,12 +2,13 @@ package com.example.codemaster.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.codemaster.data.model.Contest
+import com.example.codemaster.data.model.Response
 import com.example.codemaster.data.source.repository.Repository
-import com.example.codemaster.navigation.Screens
-import com.example.codemaster.utils.NavigateUI
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,17 +16,43 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     val repository: Repository
-) : ViewModel(){
+): ViewModel(){
 
-    // handle events send by the ui layer
-    private val _uiEvents = Channel<NavigateUI>()
-    val uiEvents = _uiEvents.receiveAsFlow()
+    private val _uiState = MutableStateFlow<HomeState>(HomeState.Loading)
+    val uiState : StateFlow<HomeState> = _uiState
 
-    fun onEvent(event: NavigateUI) = viewModelScope.launch {
-        _uiEvents.send(event)
+    init{
+        viewModelScope.launch {
+            repository.getAllContestData().collect{
+                if(it != null){
+                    fetchContestsData()
+                }
+            }
+        }
     }
-    fun logout() = viewModelScope.launch {
-        repository.logout()
-        onEvent(NavigateUI.Navigate(onNavigate = Screens.LoginScreen))
+
+    private fun fetchContestsData() = viewModelScope.launch {
+        try{
+            val result: Flow<Response<Contest>?> = repository.getAllContestData()
+            result.collect{
+                when(it){
+                    is Response.Loading -> {
+                        _uiState.value = HomeState.Loading
+                    }
+                    is Response.Success -> {
+                        _uiState.value = it.data?.let { it1 -> HomeState.Success(it1) }!!
+                    }
+                    is Response.Failure -> {
+                        _uiState.value = HomeState.Failure(it.message.toString())
+                    }
+                    else ->{
+                        _uiState.value = HomeState.Loading
+                    }
+                }
+            }
+        }
+        catch (e: Exception){
+            _uiState.value = HomeState.Failure("Oops! Something Went wrong")
+        }
     }
 }

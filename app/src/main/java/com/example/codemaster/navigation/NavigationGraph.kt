@@ -63,15 +63,7 @@ fun NavigationGraph(
             )
         }
         composable(route = Screens.HomeScreen.route) {
-            HomeScreen(
-                onNavigate = {
-                    navController.navigate(it.route) {
-                        popUpTo(it.route) {
-                            inclusive = true
-                        }
-                    }
-                }
-            )
+            HomeScreen()
         }
         composable(route = Screens.CodechefScreen.route) {
             CodechefScreen()

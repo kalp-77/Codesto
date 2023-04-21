@@ -123,6 +123,6 @@ dependencies {
     //accompanist
     implementation("com.google.accompanist:accompanist-pager:0.27.1")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.27.1")
-
+    implementation("com.google.android.material:material:1.5.0-alpha01")
 
 }

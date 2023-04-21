@@ -34,7 +34,7 @@ class LoginViewModel @Inject constructor(
 
     init {
         if(currentUser != null) {
-            onEvent(NavigateUI.Navigate(onNavigate = Screens.HomeScreen))
+            onEvent(NavigateUI.Navigate(onNavigate = Screens.ContestsScreen))
         }
     }
 
@@ -47,7 +47,7 @@ class LoginViewModel @Inject constructor(
                 }
                 is Response.Success<*> -> {
                     _userDetails.value = Response.Success(result.data?.user)
-                    onEvent(NavigateUI.Navigate(onNavigate = Screens.HomeScreen))
+                    onEvent(NavigateUI.Navigate(onNavigate = Screens.ContestsScreen))
                 }
                 is Response.Failure<*> -> {
                     _userDetails.value = Response.Failure(result.message.toString())
