@@ -7,13 +7,13 @@ data class Codeforces(
     val avatar: String,
     @SerializedName("contest")
     val contest: List<Int>,
-    @SerializedName("max rank")
+    @SerializedName("maxRank")
     val maxRank: String,
-    @SerializedName("max rating")
+    @SerializedName("maxRating")
     val maxRating: Int,
     @SerializedName("platform")
     val platform: String,
-    @SerializedName("problem solved")
+    @SerializedName("problemSolved")
     val problemSolved: String,
     @SerializedName("rank")
     val rank: String,

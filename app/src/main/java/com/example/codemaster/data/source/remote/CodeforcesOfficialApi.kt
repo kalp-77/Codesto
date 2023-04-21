@@ -10,6 +10,7 @@ import retrofit2.http.Query
 
 interface CodeforcesOfficialApi {
 
+
     @GET("user.rating?")
     suspend fun getUserRatingChanges(
         @Query("handle", encoded = true) handle : String
@@ -24,4 +25,6 @@ interface CodeforcesOfficialApi {
     suspend fun getCodeforcesUserInfo(
         @Query("handles", encoded = true) handle : String
     ) : Response<UserInfo>?
+
+
 }

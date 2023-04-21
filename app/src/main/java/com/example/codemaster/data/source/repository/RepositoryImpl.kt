@@ -143,8 +143,8 @@ class RepositoryImpl @Inject constructor(
     override suspend fun getCodeforcesScreenData(username: String): Flow<Response<CodeforcesScreenData>?> {   // graphData + userInfo
         return flow {
             emit(Response.Loading())
-            val userData = codeforcesApi.getCodeforcesUserInfo("kalp-77")?.body()
-            val graphData = codeforcesApi.getUserRatingChanges("kalp-77")?.body()
+            val userData = codeforcesApi.getCodeforcesUserInfo(username)?.body()
+            val graphData = cfccApi.getCodeforcesData(username)?.body()
             emit(Response.Success(data = CodeforcesScreenData(userData!!, graphData!!)))
         }.catch {
             emit(Response.Failure(it.message.toString()))

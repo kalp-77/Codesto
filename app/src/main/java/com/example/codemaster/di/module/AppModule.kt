@@ -7,10 +7,12 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
@@ -37,22 +39,27 @@ object AppModule {
     @Singleton
     fun provideRealtimeDatabase() : DatabaseReference = Firebase.database.reference.child("user")
 
-//    @Provides
-//    @Singleton
-//    fun provideAuthRepositoryImpl(
-//        firebaseAuth: FirebaseAuth,
-//        db : DatabaseReference
-//    ) : Repository {
-//        return RepositoryImpl(firebaseAuth, db)  // we can use this repository implementation in view model
-//    }
+    @Singleton
+    val gson = GsonBuilder()
+        .setLenient()
+        .create()!!
 
     @Provides
     @Singleton
     fun provideGsonConverterFactory(gson: Gson): GsonConverterFactory {
-        return GsonConverterFactory
-            .create(gson)
-
+        return GsonConverterFactory.create(gson)
     }
+
+    @Singleton
+    val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+                .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")
+                .build()
+            chain.proceed(request)
+        }
+        .build()
+
     @Provides
     @Singleton
     @Named("Leetcode")
@@ -62,6 +69,7 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+
 
     @Provides
     @Singleton
@@ -74,13 +82,15 @@ object AppModule {
 
     }
 
+
     @Provides
     @Singleton
     @Named("Codeforces")
     fun providesCodeforcesApi(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://codeforces.com/api/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
 

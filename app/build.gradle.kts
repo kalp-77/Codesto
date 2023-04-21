@@ -118,4 +118,6 @@ dependencies {
 
     // Firebase Realtime Database
     implementation("com.google.firebase:firebase-database-ktx:20.2.0")
+    implementation("androidx.webkit:webkit:1.6.1")
+
 }

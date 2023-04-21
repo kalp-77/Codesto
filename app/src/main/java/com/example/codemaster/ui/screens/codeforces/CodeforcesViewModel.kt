@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class CodeforcesViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<CodeforcesState>(CodeforcesState.Loading)
-    val uiState : StateFlow<CodeforcesState> = _uiState
+    val uiState : StateFlow<CodeforcesState> = _uiState.asStateFlow()
 
     // handle events send by the ui layer
     private val _uiEvents = Channel<NavigateUI>()
@@ -29,15 +30,16 @@ class CodeforcesViewModel @Inject constructor(
 
     init{
         viewModelScope.launch {
-            repository.getCodechefUser().collect {
+            repository.getCodeforcesUser().collect {
                 if(it != null) {
-                    fetchCodeforcesData(it)
+                    Log.d("munii", it )
+                    fetchCodeforcesData(it.toString())
                 }
             }
         }
 
     }
-    fun fetchCodeforcesData(username : String) = viewModelScope.launch {
+    private fun fetchCodeforcesData(username : String) = viewModelScope.launch {
         try{
             val data = repository.getCodeforcesScreenData(username)  // data = codeforcesScreenData : (userInfo + graphData)
             data.collect {

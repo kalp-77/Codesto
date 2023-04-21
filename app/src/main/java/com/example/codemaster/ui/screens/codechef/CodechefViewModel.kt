@@ -34,7 +34,7 @@ class CodechefViewModel @Inject constructor(
             }
         }
     }
-    fun fetchCodechefData(username : String) = viewModelScope.launch {
+    private fun fetchCodechefData(username : String) = viewModelScope.launch {
         try {
             val result : Flow<Response<Codechef>?> = repository.getCodechefData(username)
             result.collect {

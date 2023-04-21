@@ -213,7 +213,7 @@ fun CodeforcesDisplayScreen (
                     shape = RoundedCornerShape(10.dp),
                     elevation = CardDefaults.cardElevation(3.dp)
                 ) {
-                    CodeforcesGraph(graphData = data.ratingChange)
+                    CodeforcesGraph(graphData = data.graphData)
                 }
             }
         }
@@ -222,12 +222,12 @@ fun CodeforcesDisplayScreen (
 
 @Composable
 fun CodeforcesGraph(
-    graphData: UserRatingChanges
+    graphData: Codeforces
 ){
     val mylist = mutableListOf<DataPoint>()
     var i = 0
-    for(j in graphData.result) {
-        mylist.add(DataPoint(i.toFloat(), j.oldRating.toFloat()))
+    for(j in graphData.contest.reversed()) {
+        mylist.add(DataPoint(i.toFloat(), j.toFloat()))
         i += 1
     }
     val lines: List<List<DataPoint>> = listOf(mylist)
