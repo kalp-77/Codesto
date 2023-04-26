@@ -173,7 +173,7 @@ fun Problems(
         RatingMenuList(expanded)
     }
     if(data.isEmpty()){
-        Nul("No result found!");
+        Nul("No result found!")
     }
     Column{
         LazyColumn(
@@ -371,7 +371,7 @@ fun TagDialog(
             }
         },
         confirmButton = {
-            Column(){
+            Column{
                 Button(
                     onClick = {
                         state.value = false

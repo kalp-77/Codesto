@@ -2,6 +2,7 @@ package com.example.codemaster.ui.screens.home
 
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -36,6 +37,7 @@ import com.example.codemaster.R
 import com.example.codemaster.WebViewActivity
 import com.example.codemaster.data.model.Contest
 import com.example.codemaster.data.model.ContestItem
+import com.example.codemaster.ui.screens.codeforces_problemset.Nul
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -73,18 +75,19 @@ fun OngoingContestsScreen(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun OngoingContestsDisplayScreen(
-    data : Contest,
+    data : List<ContestItem>,
 ){
-    val list = data.filter {  it.status == "CODING" }
-    if(list.isEmpty()){
-//        Nul("No Upcoming Contests!")
+//    val list = data.filter {  it.status == "CODING" }
+    Log.d("TAG", "OngoingContestsDisplayScreen: $data")
+    if(data.isEmpty()){
+        Nul("No Upcoming Contests!")
     }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 52.dp)
+//            .padding(bottom = 50.dp)
     ) {
-        items(list){
+        items(data){
             OngoingCard(data = it)
         }
     }
@@ -123,21 +126,15 @@ fun OngoingCard(
                     }
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    val painter: Painter
-                    if(data.site == "CodeChef")
-                        painter = painterResource(id = R.drawable.icons_codechef)
-                    else if(data.site == "CodeForces")
-                        painter = painterResource(id = R.drawable.icons_codeforces)
-                    else if(data.site == "LeetCode")
-                        painter = painterResource(id = R.drawable.icons_leetcode)
-                    else if(data.site == "HackerRank")
-                        painter = painterResource(id = R.drawable.icons_hackerrank)
-                    else if(data.site == "HackerEarth")
-                        painter = painterResource(id = R.drawable.icons_hackerearth)
-                    else if(data.site == "AtCoder")
-                        painter = painterResource(id = R.drawable.icons_atcoder)
-                    else
-                        painter = painterResource(id = R.drawable.icons_google)
+                    val painter: Painter = when (data.site) {
+                        "CodeChef" -> painterResource(id = R.drawable.icons_codechef)
+                        "CodeForces" -> painterResource(id = R.drawable.icons_codeforces)
+                        "LeetCode" -> painterResource(id = R.drawable.icons_leetcode)
+                        "HackerRank" -> painterResource(id = R.drawable.icons_hackerrank)
+                        "HackerEarth" -> painterResource(id = R.drawable.icons_hackerearth)
+                        "AtCoder" -> painterResource(id = R.drawable.icons_atcoder)
+                        else -> painterResource(id = R.drawable.icons_google)
+                    }
                     Image(
                         painter = painter,
                         contentDescription = "logo",
@@ -175,7 +172,7 @@ fun OngoingCard(
                 val length = x?.div(3600)
                 if(length != null){
                     Text(
-                        text = "Duration : ${length.toString()} hrs",
+                        text = "Duration : $length hrs",
                         fontFamily = font
                     )
                 }

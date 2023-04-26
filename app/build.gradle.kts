@@ -125,4 +125,6 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager-indicators:0.27.1")
     implementation("com.google.android.material:material:1.5.0-alpha01")
 
+    //collapsing toolbar
+    implementation("me.onebone:toolbar-compose:2.3.5")
 }

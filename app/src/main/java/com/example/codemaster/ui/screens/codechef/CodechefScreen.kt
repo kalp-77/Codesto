@@ -1,5 +1,6 @@
 package com.example.codemaster.ui.screens.codechef
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
+import com.example.codemaster.MyApplication
+import com.example.codemaster.WebViewActivity
 import com.example.codemaster.data.model.Codechef
 import com.madrapps.plot.line.DataPoint
 import com.madrapps.plot.line.LineGraph
@@ -66,7 +69,6 @@ fun CodechefScreen(
             is CodechefState.Success -> {
                 CodechefDisplayScreen(state.data)
             }
-            else -> {}
         }
     }
 }
@@ -85,11 +87,12 @@ fun CodechefDisplayScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(Color.White),
                     elevation = CardDefaults.cardElevation(3.dp),
                     shape = RoundedCornerShape(10.dp),
                 ) {
                     Column(modifier = Modifier.padding(10.dp)) {
-                        Row() {
+                        Row {
                             Column(modifier = Modifier.padding(10.dp)) {
                                val painter = rememberImagePainter(data = data.avatar)
                                 Image(
@@ -154,11 +157,12 @@ fun CodechefDisplayScreen(
                     modifier = Modifier
                         .height(80.dp)
                         .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(Color.White),
                     onClick = {
-//                        val myIntent = Intent(MyApplication.instance, WebViewActivity::class.java)
-//                        myIntent.putExtra("key", url)
-//                        myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                        MyApplication.instance.startActivity(myIntent)
+                        val myIntent = Intent(MyApplication.instance, WebViewActivity::class.java)
+                        myIntent.putExtra("key", url)
+                        myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        MyApplication.instance.startActivity(myIntent)
                     },
                     shape = RoundedCornerShape(10.dp),
                     elevation = CardDefaults.cardElevation(3.dp)

@@ -175,7 +175,7 @@ fun LoginScreen(
                 .clickable {
                      viewModel.onEvent(NavigateUI.Navigate(Screens.SignupScreen))
                 },
-            text = "Already Have an account? login In",
+            text = "Don't have an account? Sign Up",
             fontWeight = FontWeight.Bold, color = Color.Black, fontFamily = FontFamily.SansSerif
         )
     }

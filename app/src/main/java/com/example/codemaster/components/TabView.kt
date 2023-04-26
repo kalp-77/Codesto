@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,13 +55,13 @@ fun Tabs(pagerState: PagerState) {
     val scope = rememberCoroutineScope()
 
     // Tab row
-    ScrollableTabRow(
+    TabRow(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Unspecified),
         selectedTabIndex = pagerState.currentPage,
         containerColor = Color.White,
-        edgePadding = 24.dp,
+//        edgePadding = 24.dp,
         contentColor = Color.Black,
         indicator = {
             Box(
@@ -94,7 +95,7 @@ fun Tabs(pagerState: PagerState) {
                 selected = pagerState.currentPage == index,
                 onClick = {
                     scope.launch {
-                        pagerState.animateScrollToPage(index)
+                        pagerState.scrollToPage(index)
                     }
                 }
             )

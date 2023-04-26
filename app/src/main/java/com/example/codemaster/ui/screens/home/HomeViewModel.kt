@@ -21,6 +21,12 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<HomeState>(HomeState.Loading)
     val uiState : StateFlow<HomeState> = _uiState
 
+    private val _uiState2 = MutableStateFlow<HomeState>(HomeState.Loading)
+    val uiState2 : StateFlow<HomeState> = _uiState2
+
+    private val _uiState3 = MutableStateFlow<HomeState>(HomeState.Loading)
+    val uiState3 : StateFlow<HomeState> = _uiState3
+
     init{
         viewModelScope.launch {
             repository.getAllContestData().collect{
@@ -38,21 +44,36 @@ class HomeViewModel @Inject constructor(
                 when(it){
                     is Response.Loading -> {
                         _uiState.value = HomeState.Loading
+                        _uiState2.value = HomeState.Loading
+                        _uiState3.value = HomeState.Loading
+
                     }
                     is Response.Success -> {
-                        _uiState.value = it.data?.let { it1 -> HomeState.Success(it1) }!!
+                        _uiState.value = it.data?.let { it1 -> HomeState.Success(it1.filter { it.status == "CODING" } ) }!!
+                        _uiState2.value = it.data?.let { it1 -> HomeState.Success(it1.filter { it.in_24_hours == "Yes" }) }!!
+                        _uiState3.value = it.data?.let { it1 -> HomeState.Success(it1.filter { it.status == "BEFORE" }) }!!
+
                     }
                     is Response.Failure -> {
                         _uiState.value = HomeState.Failure(it.message.toString())
+                        _uiState2.value = HomeState.Failure(it.message.toString())
+                        _uiState3.value = HomeState.Failure(it.message.toString())
+
                     }
                     else ->{
                         _uiState.value = HomeState.Loading
+                        _uiState2.value = HomeState.Loading
+                        _uiState3.value = HomeState.Loading
+
                     }
                 }
             }
         }
         catch (e: Exception){
             _uiState.value = HomeState.Failure("Oops! Something Went wrong")
+            _uiState2.value = HomeState.Failure("Oops! Something Went wrong")
+            _uiState3.value = HomeState.Failure("Oops! Something Went wrong")
+
         }
     }
 }

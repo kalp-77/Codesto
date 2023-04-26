@@ -65,10 +65,10 @@ fun NavigationGraph(
         composable(route = Screens.HomeScreen.route) {
             HomeScreen()
         }
-        composable(route = Screens.CodechefScreen.route) {
+        composable(route = BottomNavScreens.CodechefScreen.route) {
             CodechefScreen()
         }
-        composable(route = Screens.CodeforcesScreen.route) {
+        composable(route = BottomNavScreens.CodeforcesScreen.route) {
             CodeforcesScreen(
                 onNavigate = {
                     navController.navigate(it.route)
@@ -81,7 +81,7 @@ fun NavigationGraph(
         composable(route = Screens.RatingChangeScreen.route) {
             RatingChangeScreen()
         }
-        composable(route = Screens.LeetcodeScreen.route) {
+        composable(route = BottomNavScreens.LeetcodeScreen.route) {
             LeetcodeScreen()
         }
         composable(route = Screens.ContestsScreen.route){

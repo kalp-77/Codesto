@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -71,7 +72,6 @@ fun LeetcodeScreen(
             is LeetcodeState.Success -> {
                 LeetcodeDisplayScreen(state.data)
             }
-            else -> {}
         }
     }
 }
@@ -91,6 +91,7 @@ fun LeetcodeDisplayScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(Color.White),
                     elevation = CardDefaults.cardElevation(5.dp),
                     shape = RoundedCornerShape(10.dp)
                 ) {
@@ -207,6 +208,7 @@ fun LeetcodeDisplayScreen(
                     modifier = Modifier
                         .height(80.dp)
                         .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(Color.White),
                     onClick = {
                         val myIntent = Intent(MyApplication.instance, WebViewActivity::class.java)
                         myIntent.putExtra("key", url)
@@ -219,7 +221,7 @@ fun LeetcodeDisplayScreen(
                     Text(
                         text = "PROBLEMS",
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.wrapContentSize(),
+                        modifier = Modifier.wrapContentSize().align(Alignment.CenterHorizontally),
                         fontFamily = font,
                         color = Color(0xFF2A265C)
                     )
@@ -227,7 +229,7 @@ fun LeetcodeDisplayScreen(
             }
             Row(modifier = Modifier.padding(10.dp)) {
                 DonutChart(
-                    modifier = Modifier,
+                    modifier = Modifier.align(Alignment.CenterVertically),
                     progress = listOf(
                         data.easy_questions_solved.toFloat(),
                         data.medium_questions_solved.toFloat(),

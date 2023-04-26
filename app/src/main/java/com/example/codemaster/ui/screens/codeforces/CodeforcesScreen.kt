@@ -1,7 +1,5 @@
 package com.example.codemaster.ui.screens.codeforces
 
-import android.util.Log
-import android.widget.Space
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,7 +17,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -29,29 +25,25 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.codemaster.data.model.Codeforces
-import com.example.codemaster.data.model.codeforces_model.RatingChangeResult
-import com.example.codemaster.data.model.codeforces_model.UserRatingChanges
 import com.example.codemaster.navigation.Screens
 import com.example.codemaster.utils.NavigateUI
 import com.madrapps.plot.line.DataPoint
 import com.madrapps.plot.line.LineGraph
 import com.madrapps.plot.line.LinePlot
+
 
 //val font = FontFamily(Font(R.font.varelaround_regular))
 val font = FontFamily.SansSerif
@@ -121,11 +113,12 @@ fun CodeforcesDisplayScreen (
                 Card(
                     modifier = Modifier
                         .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(Color.White),
                     elevation = CardDefaults.cardElevation(3.dp),
                     shape = RoundedCornerShape(10.dp)
                 ) {
                     Column(modifier = Modifier.padding(10.dp) ) {
-                        Row() {
+                        Row {
                             Column(modifier = Modifier.padding(10.dp)) {
                                 val painter = rememberAsyncImagePainter(model = data.userData.result[0].avatar)
                                 Image(
@@ -173,24 +166,30 @@ fun CodeforcesDisplayScreen (
                     modifier = Modifier
                         .height(80.dp)
                         .width(140.dp),
+                    colors = CardDefaults.cardColors(Color.White),
                     elevation = CardDefaults.cardElevation(3.dp),
                     onClick = {
                         viewModel.onEvent(NavigateUI.Navigate(Screens.ProblemsetScreen))
                     },
-                    shape = RoundedCornerShape(10.dp)
+                    shape = RoundedCornerShape(10.dp),
                 ) {
-                    Text(
-                        text = "PROBLEMS",
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.wrapContentSize(),
-                        fontFamily = FontFamily.SansSerif, // font
-                        color = Color(0xFF2A265C),
-                    )
+                    Box(
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ){
+                        Text(
+                            text = "PROBLEMS",
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.wrapContentSize(),
+                            fontFamily = FontFamily.SansSerif, // font
+                            color = Color(0xFF2A265C),
+                        )
+                    }
                 }
                 Card(
                     modifier = Modifier
                         .height(80.dp)
                         .width(140.dp),
+                    colors = CardDefaults.cardColors(Color.White),
                     onClick = {
                         viewModel.onEvent(NavigateUI.Navigate(Screens.RatingChangeScreen))
                     },
@@ -238,7 +237,7 @@ fun CodeforcesGraph(
                     lines[0],
                     LinePlot.Connection(Color(0xFF46468A), 1.dp),
                     LinePlot.Intersection(Color(0xFF46468A), 4.dp),
-                    LinePlot.Highlight(Color.Black, 4.dp),
+                    LinePlot.Highlight(Color.Black, 2.dp),
                     LinePlot.AreaUnderLine(Color(0xffDEDEFA), 0.3f)
                 ),
                 LinePlot.Line(
@@ -254,16 +253,19 @@ fun CodeforcesGraph(
             selection =  LinePlot.Selection(
                 highlight = LinePlot.Connection(
                     Color.Black,
-                    strokeWidth = 3.dp,
-                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 15f))
+                    strokeWidth = 1.dp,
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(8f, 5f))
                 ),
-                detectionTime = 50
+                detectionTime = 30
             ),
             xAxis = LinePlot.XAxis(stepSize = mylist.size.dp, steps = 1),
         ),
         modifier = Modifier
             .fillMaxWidth()
-            .height(300.dp)
+            .height(300.dp),
+        onSelection = { xLine, points ->
+
+        }
     )
 }
 

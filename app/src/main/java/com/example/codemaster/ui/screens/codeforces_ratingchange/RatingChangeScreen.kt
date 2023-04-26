@@ -26,9 +26,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.codemaster.data.model.codeforces_model.RatingChangeResult
-import com.example.codemaster.data.model.codeforces_model.UserRatingChanges
-import com.example.codemaster.ui.screens.codeforces_ratingchange.RatingChangeState
-import com.example.codemaster.ui.screens.codeforces_ratingchange.RatingChangeViewModel
 
 
 val font = FontFamily.SansSerif
