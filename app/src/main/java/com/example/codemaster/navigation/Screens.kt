@@ -1,31 +1,47 @@
 package com.example.codemaster.navigation
 
-import android.graphics.drawable.Icon
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.codemaster.R
+import androidx.compose.ui.res.vectorResource
 
 
-sealed class Screens(val route: String) {
-    object LoginScreen : Screens(route = "Login_Screen")
-    object SignupScreen : Screens(route = "Signup_Screen")
-    object PlatformScreen : Screens(route = "Platform_Screen")
-    object HomeScreen : Screens(route = "Home_Screen")
-//    object CodechefScreen : Screens(route = "Codechef_Screen")
-//    object CodeforcesScreen : Screens(route = "Codeforces_Screen")
-//    object LeetcodeScreen : Screens(route = "Leetcode_Screen")
-    object ProblemsetScreen : Screens(route = "Problemset_Screen")
-    object RatingChangeScreen : Screens(route = "Rating_Change_Screen")
-    object ContestsScreen : Screens(route = "Contests_Screen")
-
+enum class Screens{
+    LoginScreen,
+    SignupScreen,
+    PlatformScreen,
+    HomeScreen,
+    CodechefScreen,
+    CodeforcesScreen,
+    LeetcodeScreen,
+    ProblemsetScreen,
+    RatingChangeScreen,
 }
-
 sealed class BottomNavScreens(
+    val route: String,
     val icon: Int,
-    val route: String
-){
-    object ContestsScreen : BottomNavScreens(icon = R.drawable.icons_contests, route = "Contests_Screen")
-    object CodechefScreen : BottomNavScreens(icon = R.drawable.icons_codechef, route = "Codechef_Screen")
-    object CodeforcesScreen : BottomNavScreens(icon = R.drawable.icons_codeforces, route = "Codeforces_Screen")
-    object LeetcodeScreen : BottomNavScreens(icon = R.drawable.icons_leetcode, route = "Leetcode_Screen")
+    val title: String
+) {
+    object HomeScreen : BottomNavScreens(
+        Screens.HomeScreen.name,
+        R.drawable.icons_contests,
+        "Contests"
+    )
 
+    object CodechefScreen : BottomNavScreens(
+        Screens.CodechefScreen.name,
+        R.drawable.icons_codechef,
+        "Codechef"
+    )
 
+    object CodeforcesScreen : BottomNavScreens(
+        Screens.CodeforcesScreen.name,
+        R.drawable.icons_codeforces,
+        "Codeforces"
+    )
+
+    object LeetcodeScreen : BottomNavScreens(
+        Screens.LeetcodeScreen.name,
+        R.drawable.icons_leetcode,
+        "Leetcode"
+    )
 }

@@ -5,8 +5,10 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ScrollableTabRow
-import androidx.compose.material3.TabRow
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabPosition
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,22 +25,24 @@ import com.example.codemaster.ui.screens.leetcode.font
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.launch
 
+
+private val TABS_LIST = listOf(
+    "Ongoing",
+    "In 24 hrs",
+    "Future"
+)
+
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabView(
-//    topBar : @Composable ()->Unit,
-//    intent : Intent
-){
+fun TabView(){
     val pagerState = rememberPagerState(0)
     Column(
         modifier = Modifier.background(Color.White)
     ) {
-//        topBar()
         Tabs(pagerState = pagerState)
         TabsContent(
             pagerState = pagerState,
-//            intent = intent
         )
     }
 }
@@ -47,47 +51,41 @@ fun TabView(
 @ExperimentalPagerApi
 @Composable
 fun Tabs(pagerState: PagerState) {
-    val list = listOf(
-        "Ongoing",
-        "In 24 hrs",
-        "Future"
-    )
     val scope = rememberCoroutineScope()
-
-    // Tab row
-    TabRow(
+    val tabIndicator: @Composable (List<TabPosition>) -> Unit = {
+        Box(
+            Modifier
+                .tabIndicatorOffset(it[pagerState.currentPage])
+                .height(height = 1.dp)
+                .padding(start = 14.dp, end = 14.dp)
+                .background(color = Color.Black)
+        )
+    }
+    val divider: @Composable () -> Unit = {
+        Divider(
+            color = Color.White
+        )
+    }
+    ScrollableTabRow(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.Unspecified),
         selectedTabIndex = pagerState.currentPage,
         containerColor = Color.White,
-//        edgePadding = 24.dp,
+        edgePadding = 24.dp,
         contentColor = Color.Black,
-        indicator = {
-            Box(
-                Modifier
-                    .tabIndicatorOffset(it[pagerState.currentPage])
-                    .height(height = 1.dp)
-                    .padding(start = 14.dp, end = 14.dp)
-                    .background(color = Color.Black)
-            )
-        },
-        divider = {
-            androidx.compose.material3.Divider(
-                color = Color.White
-            )
-        }
+        indicator = tabIndicator,
+        divider = divider
     ) {
-        list.forEachIndexed { index, _ ->
-            androidx.compose.material3.Tab(
+        TABS_LIST.forEachIndexed { index, _ ->
+            Tab(
                 modifier = Modifier
                     .clip(RoundedCornerShape(50))
                     .background(Color.White)
                     .padding(vertical = 2.dp),
                 text = {
                     Text(
-                        text = list[index],
-                        color = if (pagerState.currentPage == index) Color(0xFF2A265C) else Color.LightGray,
+                        text = TABS_LIST[index],
                         fontSize = 14.sp,
                         fontFamily = font
                     )
@@ -107,14 +105,20 @@ fun Tabs(pagerState: PagerState) {
 @ExperimentalPagerApi
 @Composable
 fun TabsContent(
-    pagerState: PagerState,
-//    intent : Intent
+    pagerState: PagerState
 ) {
     HorizontalPager(state = pagerState, count = 3) { page ->
         when (page) {
-            0 -> OngoingContestsScreen()
-            1 -> HomeScreen()
-            2 -> FutureContestsScreen()
+            0 ->{
+                HomeScreen()
+            }
+            1 ->{
+                FutureContestsScreen()
+            }
+            2 ->{
+                OngoingContestsScreen()
+            }
         }
     }
+
 }

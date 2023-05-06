@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.codemaster.components.BottomNav
 import com.example.codemaster.components.TopBar
 import com.example.codemaster.navigation.NavigationGraph
+import com.example.codemaster.navigation.Screens
 import com.example.codemaster.ui.theme.CodeMasterTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -44,17 +45,18 @@ class MainActivity : ComponentActivity() {
                 var showTopBar by rememberSaveable { mutableStateOf(true) }
 
                 showBottomBar = when (navBackStackEntry?.destination?.route) {
-                    "Login_Screen" -> false
-                    "Signup_Screen" -> false
-                    "Platform_Screen" -> false
-                    "Problemset_Screen" -> false
-                    "Rating_Change_Screen" -> false
+                    Screens.LoginScreen.name -> false
+                    Screens.SignupScreen.name -> false
+                    Screens.PlatformScreen.name -> false
+                    Screens.ProblemsetScreen.name -> false
+                    Screens.RatingChangeScreen.name -> false
+                    Screens.CodeforcesScreen.name-> false
                     else -> true
                 }
 
                 showTopBar = when(navBackStackEntry?.destination?.route){
-                    "Problemset_Screen" -> false
-                    "Rating_Change_Screen" -> false
+                    Screens.CodeforcesScreen.name -> false
+                    Screens.RatingChangeScreen.name -> false
                     else -> true
                 }
 

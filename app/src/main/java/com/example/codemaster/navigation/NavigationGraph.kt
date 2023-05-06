@@ -29,62 +29,59 @@ fun NavigationGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screens.LoginScreen.route
+        startDestination = Screens.LoginScreen.name
     ) {
-        composable(route = Screens.LoginScreen.route) {
+        composable(route = Screens.LoginScreen.name) {
             LoginScreen(
                 onNavigate = {
-                    navController.navigate(it.route) {
-                        popUpTo(it.route) {
+                    navController.navigate(it.name) {
+                        popUpTo(it.name) {
                             inclusive = true
                         }
                     }
                 }
             )
         }
-        composable(route = Screens.SignupScreen.route) {
+        composable(route = Screens.SignupScreen.name) {
             SignupScreen(
                 onNavigate = {
-                    navController.navigate(it.route){
-                        popUpTo(it.route){ inclusive = true }
+                    navController.navigate(it.name){
+                        popUpTo(it.name){ inclusive = true }
                     }
                 }
             )
         }
-        composable(route = Screens.PlatformScreen.route) {
+        composable(route = Screens.PlatformScreen.name) {
             PlatformScreen(
                 onNavigate = {
-                    navController.navigate(it.route) {
-                        popUpTo(it.route) {
+                    navController.navigate(it.name) {
+                        popUpTo(it.name) {
                             inclusive = true
                         }
                     }
                 }
             )
         }
-        composable(route = Screens.HomeScreen.route) {
-            HomeScreen()
-        }
-        composable(route = BottomNavScreens.CodechefScreen.route) {
+        composable(route = Screens.CodechefScreen.name) {
             CodechefScreen()
         }
-        composable(route = BottomNavScreens.CodeforcesScreen.route) {
+        composable(route = Screens.CodeforcesScreen.name) {
             CodeforcesScreen(
                 onNavigate = {
-                    navController.navigate(it.route)
+                    navController.navigate(it.name)
                 }
             )
         }
-        composable(route = Screens.ProblemsetScreen.route) {
+        composable(route = Screens.ProblemsetScreen.name) {
             ProblemsetScreen()
         }
-        composable(route = Screens.RatingChangeScreen.route) {
+        composable(route = Screens.RatingChangeScreen.name) {
             RatingChangeScreen()
         }
-        composable(route = BottomNavScreens.LeetcodeScreen.route) {
+        composable(route = Screens.LeetcodeScreen.name) {
             LeetcodeScreen()
         }
-        composable(route = Screens.ContestsScreen.route){
+        composable(route = Screens.HomeScreen.name){
             TabView()
         }
     }

@@ -8,3 +8,8 @@ sealed class HomeState{
     class Success(val data: List<ContestItem>) : HomeState()
     class Failure(val message: String) : HomeState()
 }
+data class ContestType(
+    val onGoing : Contest? = null,
+    val in24hrs : Contest? = null,
+    val future : Contest? = null
+)

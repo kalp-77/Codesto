@@ -2,7 +2,6 @@ package com.example.codemaster.ui.screens.home
 
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
@@ -76,16 +75,10 @@ fun FutureContestsScreen(
 fun FutureContestsDisplayScreen(
     data: List<ContestItem>
 ) {
-//    val list = data.filter {  it.status == "BEFORE" }
-    Log.d("TAG", "FutureContestsDisplayScreen: $data")
-
-    if(data.isEmpty()){
-        Nul("No Upcoming Contests!")
-    }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-//            .padding(bottom = 50.dp)
+            .padding(bottom = 52.dp)
     ) {
         items(data){
             FutureCard(data = it)
@@ -95,7 +88,9 @@ fun FutureContestsDisplayScreen(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun FutureCard(data: ContestItem) {
+fun FutureCard(
+    data: ContestItem
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -123,17 +118,8 @@ fun FutureCard(data: ContestItem) {
                     }
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    val painter: Painter = when (data.site) {
-                        "CodeChef" -> painterResource(id = R.drawable.icons_codechef)
-                        "CodeForces" -> painterResource(id = R.drawable.icons_codeforces)
-                        "LeetCode" -> painterResource(id = R.drawable.icons_leetcode)
-                        "HackerRank" -> painterResource(id = R.drawable.icons_hackerrank)
-                        "HackerEarth" -> painterResource(id = R.drawable.icons_hackerearth)
-                        "AtCoder" -> painterResource(id = R.drawable.icons_atcoder)
-                        else -> painterResource(id = R.drawable.icons_google)
-                    }
                     Image(
-                        painter = painter,
+                        painter = painterResource(id = data.icon),
                         contentDescription = "logo",
                     )
                     Text(
@@ -185,16 +171,6 @@ fun FutureCard(data: ContestItem) {
                     modifier = Modifier
                         .wrapContentSize()
                         .align(Alignment.CenterHorizontally)
-//                        .clickable {
-//                            intent.putExtra("platform", data.site)
-//                            intent.putExtra("contest", data.name)
-//                            alarmService.setAlarm(
-//                                MyApplication.instance,
-//                                data.site,
-//                                data.name,
-//                                data.start_time
-//                            )
-//                        },
                 )
             }
         }

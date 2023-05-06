@@ -9,13 +9,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    val repository: Repository
+    val repository: Repository,
 ): ViewModel(){
 
     private val _uiState = MutableStateFlow<HomeState>(HomeState.Loading)
@@ -38,34 +39,38 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun fetchContestsData() = viewModelScope.launch {
-        try{
+        try {
             val result: Flow<Response<Contest>?> = repository.getAllContestData()
-            result.collect{
-                when(it){
+            result.collect {
+                when (it) {
                     is Response.Loading -> {
                         _uiState.value = HomeState.Loading
                         _uiState2.value = HomeState.Loading
                         _uiState3.value = HomeState.Loading
 
                     }
+
                     is Response.Success -> {
                         _uiState.value = it.data?.let { it1 -> HomeState.Success(it1.filter { it.status == "CODING" } ) }!!
-                        _uiState2.value = it.data?.let { it1 -> HomeState.Success(it1.filter { it.in_24_hours == "Yes" }) }!!
-                        _uiState3.value = it.data?.let { it1 -> HomeState.Success(it1.filter { it.status == "BEFORE" }) }!!
+                        _uiState2.value = it.data.let { it1 -> HomeState.Success(it1.filter { it.in_24_hours == "Yes" }) }
+                        _uiState3.value = it.data.let { it1 -> HomeState.Success(it1.filter { it.status == "BEFORE" }) }
 
                     }
+
                     is Response.Failure -> {
                         _uiState.value = HomeState.Failure(it.message.toString())
                         _uiState2.value = HomeState.Failure(it.message.toString())
                         _uiState3.value = HomeState.Failure(it.message.toString())
 
                     }
-                    else ->{
+
+                    else -> {
                         _uiState.value = HomeState.Loading
                         _uiState2.value = HomeState.Loading
                         _uiState3.value = HomeState.Loading
 
                     }
+
                 }
             }
         }

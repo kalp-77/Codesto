@@ -80,7 +80,7 @@ fun PlatformScreen(
         Spacer(modifier = Modifier.height(20.dp))
         Button(
             onClick = {
-                viewModel.onEvent(NavigateUI.Navigate(Screens.ContestsScreen))
+                viewModel.onEvent(NavigateUI.Navigate(Screens.HomeScreen))
             },
             modifier = Modifier
                 .fillMaxWidth()

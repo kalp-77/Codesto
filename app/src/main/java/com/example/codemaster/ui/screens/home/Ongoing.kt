@@ -67,6 +67,7 @@ fun OngoingContestsScreen(
             }
             is HomeState.Success -> {
                 OngoingContestsDisplayScreen(data = state.data)
+
             }
         }
     }
@@ -77,15 +78,11 @@ fun OngoingContestsScreen(
 fun OngoingContestsDisplayScreen(
     data : List<ContestItem>,
 ){
-//    val list = data.filter {  it.status == "CODING" }
-    Log.d("TAG", "OngoingContestsDisplayScreen: $data")
-    if(data.isEmpty()){
-        Nul("No Upcoming Contests!")
-    }
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-//            .padding(bottom = 50.dp)
+            .padding(bottom = 52.dp)
     ) {
         items(data){
             OngoingCard(data = it)
@@ -97,7 +94,6 @@ fun OngoingContestsDisplayScreen(
 @Composable
 fun OngoingCard(
     data: ContestItem,
-//    intent: Intent
 ) {
     Column(
         modifier = Modifier
@@ -108,7 +104,7 @@ fun OngoingCard(
             color = Color(0xFFF3F3F3),
             thickness = 2.dp
         )
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(0.dp))
         Row(
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
@@ -126,17 +122,8 @@ fun OngoingCard(
                     }
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    val painter: Painter = when (data.site) {
-                        "CodeChef" -> painterResource(id = R.drawable.icons_codechef)
-                        "CodeForces" -> painterResource(id = R.drawable.icons_codeforces)
-                        "LeetCode" -> painterResource(id = R.drawable.icons_leetcode)
-                        "HackerRank" -> painterResource(id = R.drawable.icons_hackerrank)
-                        "HackerEarth" -> painterResource(id = R.drawable.icons_hackerearth)
-                        "AtCoder" -> painterResource(id = R.drawable.icons_atcoder)
-                        else -> painterResource(id = R.drawable.icons_google)
-                    }
                     Image(
-                        painter = painter,
+                        painter = painterResource(id = data.icon),
                         contentDescription = "logo",
                     )
                     Text(
@@ -151,7 +138,6 @@ fun OngoingCard(
                     fontFamily = font
                 )
 
-                //date
                 if(data.site == "CodeChef") {
                     Text(
                         text =  "Start : ${data.start_time.toDate()?.formatTo("dd MMM, yyyy")}",
@@ -188,16 +174,6 @@ fun OngoingCard(
                     modifier = Modifier
                         .wrapContentSize()
                         .align(Alignment.CenterHorizontally)
-//                        .clickable {
-//                            intent.putExtra("platform", data.site)
-//                            intent.putExtra("contest", data.name)
-//                            alarmService.setAlarm(
-//                                MyApplication.instance,
-//                                data.site,
-//                                data.name,
-//                                data.start_time
-//                            )
-//                        },
                 )
             }
         }

@@ -26,7 +26,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -51,7 +50,7 @@ val font = FontFamily.SansSerif
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
 ){
     Column {
         val state = viewModel.uiState2.collectAsState().value
@@ -82,20 +81,14 @@ fun HomeScreen(
 fun ContestsDisplayScreen(
     data: List<ContestItem>
 ){
-//    val list = data.filter { it.in_24_hours == "Yes" }
-    Log.d("TAG", "HomeContestsDisplayScreen: $data")
-
-    if(data.isEmpty()){
-        Nul("No Upcoming Contests!")
-    }
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-//            .padding(bottom = 50.dp)
+            .padding(bottom = 52.dp)
     ) {
         items( data ) {
             ContestCard(
-                data = it,
+                data = it
             )
         }
     }
@@ -104,7 +97,7 @@ fun ContestsDisplayScreen(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ContestCard(
-    data: ContestItem
+    data: ContestItem,
 ){
     Column(
         modifier = Modifier
@@ -115,7 +108,7 @@ fun ContestCard(
             color = Color(0xFFF3F3F3),
             thickness = 2.dp
         )
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(0.dp))
         Row(
             modifier = Modifier
                 .fillMaxSize(),
@@ -134,17 +127,8 @@ fun ContestCard(
                     }
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    val painter: Painter = when (data.site) {
-                        "CodeChef" -> painterResource(id = R.drawable.icons_codechef)
-                        "CodeForces" -> painterResource(id = R.drawable.icons_codeforces)
-                        "LeetCode" -> painterResource(id = R.drawable.icons_leetcode)
-                        "HackerRank" -> painterResource(id = R.drawable.icons_hackerrank)
-                        "HackerEarth" -> painterResource(id = R.drawable.icons_hackerearth)
-                        "AtCoder" -> painterResource(id = R.drawable.icons_atcoder)
-                        else -> painterResource(id = R.drawable.icons_google)
-                    }
                     Image(
-                        painter = painter,
+                        painter = painterResource(id = data.icon),
                         contentDescription = "logo",
                     )
                     Text(

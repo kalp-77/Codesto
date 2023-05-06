@@ -1,6 +1,6 @@
 package com.example.codemaster.data.source.repository
 
-import android.util.Log
+import com.example.codemaster.R
 import com.example.codemaster.data.model.Codechef
 import com.example.codemaster.data.model.Contest
 import com.example.codemaster.data.model.Leetcode
@@ -17,12 +17,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.snapshots
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
@@ -182,10 +179,21 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAllContestData(): Flow<Response<Contest>?> {
+    override suspend fun getAllContestData(): Flow<Response<Contest>?>{
         return flow{
             emit(Response.Loading())
             val data = contestApi.getContestDetailsData()?.body()
+            data?.forEach {
+                when (it.site) {
+                    "CodeChef" -> it.icon = R.drawable.icons_codechef
+                    "CodeForces" -> it.icon = R.drawable.icons_codeforces
+                    "LeetCode" -> it.icon = R.drawable.icons_leetcode
+                    "HackerRank" -> it.icon = R.drawable.icons_hackerrank
+                    "HackerEarth" -> it.icon = R.drawable.icons_hackerearth
+                    "AtCoder" -> it.icon = R.drawable.icons_atcoder
+                    else -> it.icon = R.drawable.icons_google
+                }
+            }
             emit(Response.Success(data = data))
         }.catch {
             emit(Response.Failure(it.message.toString()))

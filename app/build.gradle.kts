@@ -31,6 +31,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -127,4 +128,12 @@ dependencies {
 
     //collapsing toolbar
     implementation("me.onebone:toolbar-compose:2.3.5")
+
+    //charty
+    implementation("com.github.madrapps:plot:0.1.1")
+    implementation("com.github.furkanaskin:ClickablePieChart:1.0.6")
+
+    //horizontal pager
+    implementation ("androidx.compose.foundation:foundation:1.4.3")
+
 }

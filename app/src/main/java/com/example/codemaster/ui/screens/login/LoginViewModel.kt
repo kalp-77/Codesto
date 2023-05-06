@@ -34,10 +34,9 @@ class LoginViewModel @Inject constructor(
 
     init {
         if(currentUser != null) {
-            onEvent(NavigateUI.Navigate(onNavigate = Screens.ContestsScreen))
+            onEvent(NavigateUI.Navigate(onNavigate = Screens.HomeScreen))
         }
     }
-
     fun loginUser(email : String, password: String) = viewModelScope.launch{
         val authData = authRepository.loginUser(email, password)
         authData.collect {result->
@@ -47,17 +46,13 @@ class LoginViewModel @Inject constructor(
                 }
                 is Response.Success<*> -> {
                     _userDetails.value = Response.Success(result.data?.user)
-                    onEvent(NavigateUI.Navigate(onNavigate = Screens.ContestsScreen))
+                    onEvent(NavigateUI.Navigate(onNavigate = Screens.HomeScreen))
                 }
                 is Response.Failure<*> -> {
                     _userDetails.value = Response.Failure(result.message.toString())
                 }
             }
         }
-    }
-    fun logout() = viewModelScope.launch {
-        authRepository.logout()
-        onEvent(NavigateUI.Navigate(onNavigate = Screens.LoginScreen))
     }
 
     fun onEvent(event: NavigateUI) = viewModelScope.launch {
