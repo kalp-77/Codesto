@@ -67,7 +67,7 @@ fun CodechefProfileCard(
                 .fillMaxWidth()
                 .wrapContentHeight()
         ) {
-            Spacer(modifier = Modifier.height(70.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

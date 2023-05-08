@@ -1,11 +1,9 @@
 package com.example.codemaster.ui.screens.codeforces_ratingchange
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.codemaster.data.model.Response
 import com.example.codemaster.data.source.repository.Repository
-import com.example.codemaster.ui.screens.codeforces_problemset.ProblemsetState
 import com.example.codemaster.utils.NavigateUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel

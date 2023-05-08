@@ -30,11 +30,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.codemaster.ContestDetailsActivity
 import com.example.codemaster.MyApplication
 import com.example.codemaster.R
 import com.example.codemaster.WebViewActivity
-import com.example.codemaster.data.model.Contest
 import com.example.codemaster.data.model.ContestItem
 import com.example.codemaster.ui.screens.codeforces_problemset.Nul
 import java.time.OffsetDateTime
@@ -78,7 +79,7 @@ fun FutureContestsDisplayScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 52.dp)
+//            .padding(bottom = 50.dp)
     ) {
         items(data){
             FutureCard(data = it)
@@ -107,12 +108,70 @@ fun FutureCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ){
             Column(
+                modifier = Modifier.width(70.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ){
+                if(data.site == "CodeChef") {
+                    data.start_time.toDate()?.let {
+                        val mon = it.formatTo("MMM")
+                        val date = it.formatTo("dd")
+                        val year = it.formatTo("yyyy")
+                        androidx.compose.material3.Text(
+                            text = mon,
+                            fontFamily = font,
+                            color = Color(0xFFFDD835),
+                            fontSize = 11.sp
+                        )
+                        androidx.compose.material3.Text(
+                            text = date,
+                            fontFamily = font,
+                            fontWeight = FontWeight.Bold
+                        )
+                        androidx.compose.material3.Text(
+                            text = year,
+                            fontFamily = font,
+                            fontSize = 11.sp
+                        )
+                    }
+                }
+                else {
+                    val odt = OffsetDateTime.parse(data.start_time)
+                    val dtf = DateTimeFormatter.ofPattern("dd MMM, uuuu", Locale.ENGLISH)
+                    val mon = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH)
+                    val date = DateTimeFormatter.ofPattern("dd", Locale.ENGLISH)
+                    val year = DateTimeFormatter.ofPattern("uuuu", Locale.ENGLISH)
+                    androidx.compose.material3.Text(
+                        text = mon.format(odt),
+                        fontFamily = font,
+                        color = Color(0xFFFDD835),
+                        fontSize = 11.sp
+                    )
+                    androidx.compose.material3.Text(
+                        text = date.format(odt),
+                        fontFamily = font,
+                        fontWeight = FontWeight.Bold
+                    )
+                    androidx.compose.material3.Text(
+                        text = year.format(odt),
+                        fontFamily = font,
+                        fontSize = 11.sp
+                    )
+
+                }
+            }
+            Column(
                 modifier = Modifier
                     .padding(15.dp)
                     .width(250.dp)
                     .clickable {
-                        val myIntent = Intent(MyApplication.instance, WebViewActivity::class.java)
-                        myIntent.putExtra("key", data.url)
+                        val myIntent = Intent(MyApplication.instance, ContestDetailsActivity::class.java)
+                        myIntent.putExtra("platform", data.site)
+                        myIntent.putExtra("contest", data.name)
+                        myIntent.putExtra("duration", data.duration)
+                        myIntent.putExtra("startTime", data.start_time)
+                        myIntent.putExtra("endTime", data.end_time)
+                        myIntent.putExtra("url", data.url)
                         myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         MyApplication.instance.startActivity(myIntent)
                     }
@@ -135,30 +194,30 @@ fun FutureCard(
                 )
 
                 //date
-                if(data.site == "CodeChef") {
-                    Text(
-                        text =  "Start : ${data.start_time.toDate()?.formatTo("dd MMM, yyyy")}",
-                        fontFamily = font
-                    )
-                }
-                else {
-                    val odt = OffsetDateTime.parse(data.start_time)
-                    val dtf = DateTimeFormatter.ofPattern("dd MMM, uuuu", Locale.ENGLISH)
-                    Text(
-                        text = "Start : ${ dtf.format(odt) }",
-                        fontFamily = font
-                    )
-                }
+//                if(data.site == "CodeChef") {
+//                    Text(
+//                        text =  "Start : ${data.start_time.toDate()?.formatTo("dd MMM, yyyy")}",
+//                        fontFamily = font
+//                    )
+//                }
+//                else {
+//                    val odt = OffsetDateTime.parse(data.start_time)
+//                    val dtf = DateTimeFormatter.ofPattern("dd MMM, uuuu", Locale.ENGLISH)
+//                    Text(
+//                        text = "Start : ${ dtf.format(odt) }",
+//                        fontFamily = font
+//                    )
+//                }
 
                 //no. of hours
-                val x = (data.duration).toIntOrNull()
-                val length = x?.div(3600)
-                if(length != null){
-                    Text(
-                        text = "Duration : ${length.toString()} hrs",
-                        fontFamily = font
-                    )
-                }
+//                val x = (data.duration).toIntOrNull()
+//                val length = x?.div(3600)
+//                if(length != null){
+//                    Text(
+//                        text = "Duration : ${length.toString()} hrs",
+//                        fontFamily = font
+//                    )
+//                }
             }
             Column(
                 modifier = Modifier.width(100.dp),

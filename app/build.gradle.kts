@@ -74,6 +74,9 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+    implementation(libs.appcompat)
+    implementation(libs.constraintlayout)
+    implementation(platform(libs.compose.bom))
 //    implementation(libs.firebase.auth.ktx)
 //    implementation(libs.firebase.database.ktx)
     testImplementation(libs.junit)
@@ -81,6 +84,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
+    androidTestImplementation(platform(libs.compose.bom))
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
@@ -125,6 +129,8 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager:0.27.1")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.27.1")
     implementation("com.google.android.material:material:1.5.0-alpha01")
+    implementation ("com.google.accompanist:accompanist-insets-ui:0.31.1-alpha")
+
 
     //collapsing toolbar
     implementation("me.onebone:toolbar-compose:2.3.5")
@@ -147,5 +153,9 @@ dependencies {
     implementation("com.patrykandpatrick.vico:compose-m2:1.6.5")
     // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
     implementation("com.patrykandpatrick.vico:compose-m3:1.6.5")
+
+
+    //constraint layout
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha09")
 
 }

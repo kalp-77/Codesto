@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,13 +30,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.codemaster.ContestDetailsActivity
 import com.example.codemaster.MyApplication
 import com.example.codemaster.R
 import com.example.codemaster.WebViewActivity
-import com.example.codemaster.data.model.Contest
 import com.example.codemaster.data.model.ContestItem
 import com.example.codemaster.ui.screens.codeforces_problemset.Nul
 import java.text.SimpleDateFormat
@@ -84,7 +87,7 @@ fun ContestsDisplayScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 52.dp)
+//            .padding(bottom = 50.dp)
     ) {
         items( data ) {
             ContestCard(
@@ -116,12 +119,74 @@ fun ContestCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ){
             Column(
+                modifier = Modifier.width(70.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Top
+            ){
+                if(data.site == "CodeChef") {
+                    data.start_time.toDate()?.let {
+                        val mon = it.formatTo("MMM")
+                        val date = it.formatTo("dd")
+                        val year = it.formatTo("yyyy")
+                        Text(
+                            text = mon,
+                            fontFamily = font,
+                            color = Color(0xFFFDD835),
+                            fontSize = 11.sp
+                        )
+                        Text(
+                            text = date,
+                            fontFamily = font,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Text(
+                            text = year,
+                            fontFamily = font,
+                            fontSize = 11.sp
+                        )
+                    }
+                }
+                else {
+                    val odt = OffsetDateTime.parse(data.start_time)
+//                    val dtf = DateTimeFormatter.ofPattern("dd MMM, uuuu", Locale.ENGLISH)
+                    val mon = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH)
+                    val date = DateTimeFormatter.ofPattern("dd", Locale.ENGLISH)
+                    val year = DateTimeFormatter.ofPattern("uuuu", Locale.ENGLISH)
+                    Text(
+                        text = mon.format(odt),
+                        fontFamily = font,
+                        color = Color(0xFFFDD835),
+                        fontSize = 11.sp
+                    )
+                    Text(
+                        text = date.format(odt),
+                        fontFamily = font,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = year.format(odt),
+                        fontFamily = font,
+                        fontSize = 11.sp
+                    )
+
+                }
+            }
+            Column(
                 modifier = Modifier
                     .padding(15.dp)
                     .width(250.dp)
                     .clickable {
-                        val myIntent = Intent(MyApplication.instance, WebViewActivity::class.java)
-                        myIntent.putExtra("key", data.url)
+//                        val myIntent = Intent(MyApplication.instance, WebViewActivity::class.java)
+//                        myIntent.putExtra("key", data.url)
+//                        myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                        MyApplication.instance.startActivity(myIntent)
+                        val myIntent = Intent(MyApplication.instance, ContestDetailsActivity::class.java)
+                        myIntent.putExtra("platform", data.site)
+                        myIntent.putExtra("contest", data.name)
+                        myIntent.putExtra("duration", data.duration)
+                        myIntent.putExtra("startTime", data.start_time)
+                        myIntent.putExtra("endTime", data.end_time)
+                        myIntent.putExtra("url", data.url)
                         myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         MyApplication.instance.startActivity(myIntent)
                     }
@@ -143,23 +208,23 @@ fun ContestCard(
                     fontFamily = font
                 )
                 //date
-                if(data.site == "CodeChef") {
-                    data.start_time.toDate()?.let {
-                        Text(
-                            text =  it.formatTo("dd MMM, yyyy"),
-                            fontFamily = font
-                        )
-                    }
-                }
-                else {
-                    val odt = OffsetDateTime.parse(data.start_time)
-                    val dtf = DateTimeFormatter.ofPattern("dd MMM, uuuu", Locale.ENGLISH)
-                    Text(
-                        text = dtf.format(odt),
-                        fontFamily = font
-                    )
-                }
-                //no. of hours
+//                if(data.site == "CodeChef") {
+//                    data.start_time.toDate()?.let {
+//                        Text(
+//                            text =  it.formatTo("dd MMM, yyyy"),
+//                            fontFamily = font
+//                        )
+//                    }
+//                }
+//                else {
+//                    val odt = OffsetDateTime.parse(data.start_time)
+//                    val dtf = DateTimeFormatter.ofPattern("dd MMM, uuuu", Locale.ENGLISH)
+//                    Text(
+//                        text = dtf.format(odt),
+//                        fontFamily = font
+//                    )
+//                }
+//                no. of hours
                 val x = (data.duration).toIntOrNull()
                 val length = x?.div(3600)
                 if(length != null){
@@ -169,19 +234,19 @@ fun ContestCard(
                     )
                 }
             }
-            Column(
-                modifier = Modifier.width(100.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ){
-                Image(
-                    painter = painterResource(id = R.drawable.icons_alarm),
-                    contentDescription = "Reminder",
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .align(Alignment.CenterHorizontally)
-                )
-            }
+//            Column(
+//                modifier = Modifier.width(100.dp),
+//                horizontalAlignment = Alignment.CenterHorizontally,
+//                verticalArrangement = Arrangement.Center
+//            ){
+//                Image(
+//                    painter = painterResource(id = R.drawable.icons_alarm),
+//                    contentDescription = "Reminder",
+//                    modifier = Modifier
+//                        .wrapContentSize()
+//                        .align(Alignment.CenterHorizontally)
+//                )
+//            }
         }
     }
 }

@@ -6,12 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.codemaster.data.model.Response
 import com.example.codemaster.data.model.codeforces_model.Problem
 import com.example.codemaster.data.source.repository.Repository
-import com.example.codemaster.utils.NavigateUI
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

@@ -1,6 +1,7 @@
 package com.example.codemaster.components
 
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -29,7 +30,7 @@ fun BottomNav(
         BottomNavScreens.HomeScreen,
         BottomNavScreens.CodeforcesScreen,
         BottomNavScreens.CodechefScreen,
-        BottomNavScreens.LeetcodeScreen
+        BottomNavScreens.PlatformScreen
     )
     val currentRoute = remember { mutableStateOf(navController.currentDestination?.route) }
     BottomNavigation(
@@ -42,7 +43,11 @@ fun BottomNav(
         items.forEach { item ->
             BottomNavigationItem(
                 icon = {
-                    Icon(painterResource(id = item.icon), contentDescription = null)
+                    Icon(
+                        painterResource(id = item.icon),
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp)
+                    )
                 },
                 selectedContentColor = Color(0xFF2A265C),
                 unselectedContentColor = Color.LightGray,

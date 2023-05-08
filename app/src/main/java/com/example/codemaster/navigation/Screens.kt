@@ -23,8 +23,8 @@ sealed class BottomNavScreens(
 ) {
     object HomeScreen : BottomNavScreens(
         Screens.HomeScreen.name,
-        R.drawable.icons_contests,
-        "Contests"
+        R.drawable.icon_home,
+        "Home"
     )
 
     object CodechefScreen : BottomNavScreens(
@@ -43,5 +43,10 @@ sealed class BottomNavScreens(
         Screens.LeetcodeScreen.name,
         R.drawable.icons_leetcode,
         "Leetcode"
+    )
+    object PlatformScreen : BottomNavScreens(
+        Screens.PlatformScreen.name,
+        R.drawable.icon_user_profile,
+        "Profile"
     )
 }

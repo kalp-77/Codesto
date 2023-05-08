@@ -81,6 +81,9 @@ fun NavigationGraph(
         composable(route = Screens.LeetcodeScreen.name) {
             LeetcodeScreen()
         }
+        composable(route = BottomNavScreens.HomeScreen.route) {
+            HomeScreen()
+        }
         composable(route = Screens.HomeScreen.name){
             TabView()
         }

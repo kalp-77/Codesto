@@ -1,6 +1,5 @@
 package com.example.codemaster.ui.screens.leetcode
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.codemaster.data.model.Leetcode
