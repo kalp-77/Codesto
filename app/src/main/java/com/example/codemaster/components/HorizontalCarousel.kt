@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,11 +29,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.codemaster.R
 import com.example.codemaster.ui.theme.PurpleNavy20
 import com.example.codemaster.ui.theme.PurpleNavy30
+import com.example.codemaster.ui.theme.ThemeBlack30
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -54,40 +58,8 @@ fun HorizontalCarousel(){
             state = pagerState,
             userScrollEnabled = true
         ) { page ->
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(PurpleNavy20, PurpleNavy30),
-                        )
-                    )
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Practice Problems",
-                        fontSize = 16.sp,
-                        color = Color.LightGray,
-                        modifier = Modifier.padding(start = 10.dp)
-                    )
-                    Box(
-                        modifier = Modifier.padding(end = 10.dp)
-                    ){
-                        Image(
-                            modifier = Modifier.size(40.dp),
-                            painter = painterResource(id = R.drawable.cficon),
-                            contentDescription = null
-                        )
-                    }
-                }
+            CarouselCard {
+
             }
         }
         Row(
@@ -122,4 +94,51 @@ fun HorizontalCarousel(){
             }
         }
     }
+}
+
+
+@Composable
+fun CarouselCard(
+    onClick: () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(15.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(ThemeBlack30)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(
+                text = "Learn Practice \nProblem Solving",
+                fontSize = 16.sp,
+                color = Color.LightGray,
+                modifier = Modifier
+                    .padding(start = 10.dp)
+                    .fillMaxWidth(0.65f),
+                lineHeight = 20.sp,
+                fontStyle = FontStyle.Italic
+            )
+            Button(
+                onClick = onClick,
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(Color.White),
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text(
+                    text = "Learn",
+                    color = Color.Black,
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 12.sp
+                )
+            }
+        }
+    }
+
 }

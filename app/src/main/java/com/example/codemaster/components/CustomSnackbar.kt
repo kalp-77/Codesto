@@ -33,15 +33,15 @@ fun CustomSnackbar() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 20.dp, end = 20.dp)
+            .padding(start = 15.dp, end = 15.dp, top = 5.dp)
             .wrapContentHeight(),
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(PurpleNavy20)
     ){
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
+                .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
@@ -67,15 +67,7 @@ fun CustomSnackbar() {
                     color = Color.White,
                     text = "Your rating increased by +18 from last contest"
                 )
-                Text(
-                    modifier = Modifier.fillMaxWidth(1f),
-                    fontSize = 10.sp,
-                    color = Color.White,
-                    text = "Good Job!!"
-                )
             }
-
-
         }
     }
 }

@@ -38,5 +38,18 @@ val PurpleNavy20 = Color(0xFF323B52)
 val PurpleNavy30 = Color(0x344A587B)
 val GreenUpArrow = Color(0xFF8FDFAA)
 val GraphHighlight = Color(0xFFDAFFE7)
+val Grid10 = Color(0xED242323)
 
-val Grid10 = Color(0xFF363636)
+val BarGraph10 = Color(0xFF121220)
+
+
+
+
+val ThemeBlack30 = Color(0xFF121212)
+val Darkblack30 = Color(0xFF000000)
+val SnackbarBlue30 = Color(0xFF1E2331)
+val SnackbarGreen30 = Color(0xFF8EDEA9)
+val SnackbarGreen40 = Color(0xFF142723)
+
+val ThemeWhite = Color(0xFFF0F5F9)
+val ThemeLavender = Color(0xFFAEA7F5)

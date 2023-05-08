@@ -7,6 +7,7 @@ import com.example.codemaster.data.model.Leetcode
 import com.example.codemaster.data.model.Response
 import com.example.codemaster.data.model.codeforces_model.CodeforcesProblemset
 import com.example.codemaster.data.model.codeforces_model.UserRatingChanges
+import com.example.codemaster.data.model.codeforces_model.problem_solved.SolvedProblems
 import com.example.codemaster.data.source.remote.CFCCApi
 import com.example.codemaster.data.source.remote.CodeforcesOfficialApi
 import com.example.codemaster.data.source.remote.ContestApi
@@ -194,6 +195,18 @@ class RepositoryImpl @Inject constructor(
                     else -> it.icon = R.drawable.icons_google
                 }
             }
+            emit(Response.Success(data = data))
+        }.catch {
+            emit(Response.Failure(it.message.toString()))
+        }
+    }
+
+
+    /** Codeforces indexed wise problem solved **/
+    override suspend fun getSolvedProblemData(username: String): Flow<Response<SolvedProblems>?> {
+        return flow {
+            emit(Response.Loading())
+            val data = codeforcesApi.getUserProblemSolvedStatus(username).body()
             emit(Response.Success(data = data))
         }.catch {
             emit(Response.Failure(it.message.toString()))

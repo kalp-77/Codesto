@@ -3,6 +3,7 @@ package com.example.codemaster.data.source.remote
 import com.example.codemaster.data.model.codeforces_model.CodeforcesProblemset
 import com.example.codemaster.data.model.codeforces_model.UserInfo
 import com.example.codemaster.data.model.codeforces_model.UserRatingChanges
+import com.example.codemaster.data.model.codeforces_model.problem_solved.SolvedProblems
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -25,6 +26,11 @@ interface CodeforcesOfficialApi {
     suspend fun getCodeforcesUserInfo(
         @Query("handles", encoded = true) handle : String
     ) : Response<UserInfo>?
+
+    @GET("user.status?")
+    suspend fun getUserProblemSolvedStatus(
+        @Query("handle", encoded = true) handle : String
+    ) : Response<SolvedProblems>
 
 
 }

@@ -136,4 +136,16 @@ dependencies {
     //horizontal pager
     implementation ("androidx.compose.foundation:foundation:1.4.3")
 
+    /** Bar charts  **/
+    // Includes the core logic for charts and other elements.
+    implementation("com.patrykandpatrick.vico:core:1.6.5")
+    // For Jetpack Compose.
+    implementation("com.patrykandpatrick.vico:compose:1.6.5")
+    // For the view system.
+    implementation("com.patrykandpatrick.vico:views:1.6.5")
+    // For `compose`. Creates a `ChartStyle` based on an M2 Material Theme.
+    implementation("com.patrykandpatrick.vico:compose-m2:1.6.5")
+    // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
+    implementation("com.patrykandpatrick.vico:compose-m3:1.6.5")
+
 }

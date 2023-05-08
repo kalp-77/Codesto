@@ -58,6 +58,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -76,6 +77,13 @@ class CodeforcesViewModel @Inject constructor(
     val graphDataState: State<GraphDataState>
         get() = _graphDataState
 
+    private val _solvedProblemState = MutableStateFlow<Response<SolvedProblemData>?>(null)
+    val solvedProblemState = _solvedProblemState.asStateFlow()
+
+
+    private val _totalProblemSolved = mutableStateOf(0)
+    val totalProblemSolved: State<Int>
+        get() = _totalProblemSolved
 
 
     // handle events send by the ui layer
@@ -87,6 +95,7 @@ class CodeforcesViewModel @Inject constructor(
             repository.getCodeforcesUser().collect {
                 if(it != null) {
                     fetchCodeforcesData(it.toString())
+                    fetchSolvedProblemData(it.toString())
                 }
             }
         }
@@ -171,6 +180,45 @@ class CodeforcesViewModel @Inject constructor(
         }
         catch (e:Exception) {
             _uiState.value = CodeforcesState.Failure("Oops! Something went wrong")
+        }
+    }
+
+    private fun fetchSolvedProblemData(username: String) = viewModelScope.launch {
+        try {
+            val data = repository.getSolvedProblemData(username = username)  // data = codeforcesScreenData : (userInfo + graphData)
+            data.collect { it ->
+                when(it) {
+                    is Response.Loading -> {
+                        _solvedProblemState.value = Response.Loading()
+                    }
+                    is Response.Success -> {
+                        val rawData = it.data?.result?.filter {
+                            it.verdict == "OK"
+                        }
+                        val actualData = rawData?.groupBy {
+                            it.problem.rating
+                        }
+                        val groupedData = mutableMapOf<Int,Int>()
+                        var totalCount = 0
+                        actualData?.map { res ->
+                            if(res.key >=800) {
+                                totalCount += res.value.size
+                                groupedData[res.key] = res.value.size
+                            }
+                        }
+                        _totalProblemSolved.value = totalCount
+                        _solvedProblemState.value = Response.Success(data = SolvedProblemData(data = groupedData))
+                    }
+                    is Response.Failure -> {
+                        _solvedProblemState.value = Response.Failure(it.message.toString())
+                    }
+                    else -> {}
+                }
+            }
+
+        }
+        catch (e : Exception) {
+            _solvedProblemState.value = Response.Failure("no data")
         }
     }
 

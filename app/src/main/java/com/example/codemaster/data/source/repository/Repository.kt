@@ -6,6 +6,7 @@ import com.example.codemaster.data.model.Leetcode
 import com.example.codemaster.data.model.Response
 import com.example.codemaster.data.model.codeforces_model.CodeforcesProblemset
 import com.example.codemaster.data.model.codeforces_model.UserRatingChanges
+import com.example.codemaster.data.model.codeforces_model.problem_solved.SolvedProblems
 import com.example.codemaster.ui.screens.codeforces.CodeforcesScreenData
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
@@ -47,6 +48,10 @@ interface Repository {
 
     /** All Contest Api Data **/
     suspend fun getAllContestData() : Flow<Response<Contest>?>
+
+
+    /** Solved Problem Api Data  **/
+    suspend fun getSolvedProblemData(username: String) : Flow<Response<SolvedProblems>?>
 
 
 }
