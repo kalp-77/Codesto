@@ -51,11 +51,13 @@ class MainActivity : ComponentActivity() {
                     Screens.ProblemsetScreen.name -> false
                     Screens.RatingChangeScreen.name -> false
                     Screens.CodeforcesScreen.name-> false
+                    Screens.CodechefScreen.name-> false
                     else -> true
                 }
 
                 showTopBar = when(navBackStackEntry?.destination?.route){
                     Screens.CodeforcesScreen.name -> false
+                    Screens.CodechefScreen.name-> false
                     Screens.RatingChangeScreen.name -> false
                     else -> true
                 }

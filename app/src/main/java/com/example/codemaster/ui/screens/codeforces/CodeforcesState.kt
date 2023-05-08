@@ -6,7 +6,7 @@ import com.example.codemaster.data.model.codeforces_model.problem_solved.Result
 
 sealed class CodeforcesState{
     object Loading : CodeforcesState()
-    data class Success(val data: CodeforcesScreenData) : CodeforcesState()
+    data class Success(val data: CodeforcesScreenData, val ratingStatus: Int) : CodeforcesState()
     data class Failure(val message: String) : CodeforcesState()
     data class Navigate(val screen: String): CodeforcesState()
 }

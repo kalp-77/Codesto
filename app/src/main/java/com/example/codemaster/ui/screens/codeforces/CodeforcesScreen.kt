@@ -2,12 +2,15 @@ package com.example.codemaster.ui.screens.codeforces
 
 import android.graphics.Typeface
 import android.text.TextUtils
+import android.widget.OverScroller
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.OverscrollEffect
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +22,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -142,7 +146,8 @@ fun CodeforcesScreen(
                         LineChartCard(
                             linePlotLines = viewModel.graphDataState.value.linePlotLines,
                             size = viewModel.graphDataState.value.dataPoints.size,
-                            maxRating = state.data.userData.result[0].maxRating
+                            maxRating = state.data.userData.result[0].maxRating,
+                            ratingStatus = state.ratingStatus
                         )
                         Spacer(modifier = Modifier.height(20.dp))
                         HorizontalCarousel()
@@ -152,9 +157,11 @@ fun CodeforcesScreen(
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .wrapContentHeight(),
+                                        .wrapContentHeight()
+                                        .verticalScroll(rememberScrollState()),
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally
+
                                 ) {
                                     CircularProgressIndicator(
                                         color = Color(0xFFB3BCF8)

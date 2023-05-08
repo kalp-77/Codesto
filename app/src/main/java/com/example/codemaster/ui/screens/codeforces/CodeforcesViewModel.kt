@@ -112,6 +112,8 @@ class CodeforcesViewModel @Inject constructor(
                     is Response.Success -> {
                         val dataPoints = mutableStateListOf<DataPoint>()
                         val linePlotLines = mutableStateListOf<LinePlot.Line>()
+                        val ratingStatus = it.data!!.graphData.contest.last() - (it.data.graphData.contest.elementAt(it.data.graphData.contest.size - 2))
+
                         var xPos = 0f
                         for(yPos in it.data?.graphData?.contest?.reversed()!!) {
                             dataPoints.add(
@@ -169,7 +171,7 @@ class CodeforcesViewModel @Inject constructor(
                             dataPoints = dataPoints,
                             linePlotLines = linePlotLines
                         )
-                        _uiState.value = it.data.let { it1 -> CodeforcesState.Success(data = it1) }
+                        _uiState.value = it.data.let { it1 -> CodeforcesState.Success(data = it1, ratingStatus = ratingStatus) }
                     }
                     is Response.Failure -> {
                         _uiState.value = CodeforcesState.Failure(it.message.toString())

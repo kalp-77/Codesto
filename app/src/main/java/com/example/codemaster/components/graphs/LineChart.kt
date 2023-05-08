@@ -58,7 +58,8 @@ import com.madrapps.plot.line.LinePlot
 fun LineChartCard(
     linePlotLines: List<LinePlot.Line>,
     size: Int,
-    maxRating: Int
+    maxRating: Int,
+    ratingStatus: Int
 ) {
     Card(
         Modifier
@@ -126,7 +127,8 @@ fun LineChartCard(
             }
             LineChart(
                 linePlotLines = linePlotLines,
-                size = size
+                size = size,
+                ratingStatus = ratingStatus
 //                viewModel.graphDataState.value.linePlotLines,
 
             )
@@ -139,7 +141,8 @@ fun LineChartCard(
 @Composable
 fun LineChart(
     linePlotLines: List<LinePlot.Line>,
-    size: Int
+    size: Int,
+    ratingStatus: Int
 ){
     val pointValues = remember { mutableStateListOf<DataPointXline>() }
     val textPaint = remember { mutableStateOf(Paint()) }
@@ -261,7 +264,7 @@ fun LineChart(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.BottomCenter
                 ) {
-                    CustomSnackbar()
+                    CustomSnackbar(ratingStatus = ratingStatus)
                 }
             }
         }

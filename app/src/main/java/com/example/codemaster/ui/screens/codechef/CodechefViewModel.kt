@@ -65,8 +65,9 @@ class CodechefViewModel @Inject constructor(
                         /** graph **/
                         val dataPoints = mutableStateListOf<DataPoint>()
                         val linePlotLines = mutableStateListOf<LinePlot.Line>()
+                        val ratingStatus = it.data!!.contests.last() - (it.data.contests.elementAt(it.data.contests.size - 2))
                         var xPos = 0f
-                        for(yPos in it.data?.contests!!) {
+                        for(yPos in it.data.contests) {
                             dataPoints.add(DataPoint(x = xPos, yPos.toFloat()))
                             xPos += 1f
                         }
@@ -131,7 +132,7 @@ class CodechefViewModel @Inject constructor(
                         }
 
 
-                        _uiState.value = it.data.let { it1 -> CodechefState.Success(it1) }
+                        _uiState.value = it.data.let { it1 -> CodechefState.Success(it1, ratingStatus = ratingStatus) }
                     }
                     is Response.Failure -> {
                         _uiState.value = CodechefState.Failure(it.message.toString())

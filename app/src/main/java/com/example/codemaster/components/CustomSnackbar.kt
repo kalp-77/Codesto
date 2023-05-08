@@ -29,7 +29,9 @@ import com.example.codemaster.ui.theme.PurpleNavy20
 
 @Preview
 @Composable
-fun CustomSnackbar() {
+fun CustomSnackbar(
+    ratingStatus: Int
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -65,7 +67,7 @@ fun CustomSnackbar() {
                     modifier = Modifier.fillMaxWidth(1f),
                     fontSize = 10.sp,
                     color = Color.White,
-                    text = "Your rating increased by +18 from last contest"
+                    text = "Your rating increased by ${ratingStatus} from last contest"
                 )
             }
         }
