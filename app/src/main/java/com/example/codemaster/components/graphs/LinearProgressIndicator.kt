@@ -3,6 +3,7 @@ package com.example.codemaster.components.graphs
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ProgressIndicatorDefaults
@@ -31,7 +32,8 @@ fun LinearProgressIndicatorSample(que: Float, total_que : Float, color: Color, t
             color = color,
             modifier = Modifier
                 .padding(top = 5.dp, bottom = 5.dp)
-                .clip(RoundedCornerShape(5.dp)),
+                .clip(RoundedCornerShape(5.dp))
+                .width(400.dp),
             trackColor = trackColor
         )
     }

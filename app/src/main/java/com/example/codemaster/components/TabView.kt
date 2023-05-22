@@ -112,13 +112,13 @@ fun TabsContent(
     HorizontalPager(state = pagerState, count = 3) { page ->
         when (page) {
             0 ->{
-                HomeScreen()
+                OngoingContestsScreen()
             }
             1 ->{
-                FutureContestsScreen()
+                HomeScreen()
             }
             2 ->{
-                OngoingContestsScreen()
+                FutureContestsScreen()
             }
         }
     }

@@ -79,7 +79,6 @@ fun FutureContestsDisplayScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-//            .padding(bottom = 50.dp)
     ) {
         items(data){
             FutureCard(data = it)
@@ -137,7 +136,6 @@ fun FutureCard(
                 }
                 else {
                     val odt = OffsetDateTime.parse(data.start_time)
-                    val dtf = DateTimeFormatter.ofPattern("dd MMM, uuuu", Locale.ENGLISH)
                     val mon = DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH)
                     val date = DateTimeFormatter.ofPattern("dd", Locale.ENGLISH)
                     val year = DateTimeFormatter.ofPattern("uuuu", Locale.ENGLISH)
@@ -192,23 +190,6 @@ fun FutureCard(
                     fontWeight = FontWeight.Bold,
                     fontFamily = font
                 )
-
-                //date
-//                if(data.site == "CodeChef") {
-//                    Text(
-//                        text =  "Start : ${data.start_time.toDate()?.formatTo("dd MMM, yyyy")}",
-//                        fontFamily = font
-//                    )
-//                }
-//                else {
-//                    val odt = OffsetDateTime.parse(data.start_time)
-//                    val dtf = DateTimeFormatter.ofPattern("dd MMM, uuuu", Locale.ENGLISH)
-//                    Text(
-//                        text = "Start : ${ dtf.format(odt) }",
-//                        fontFamily = font
-//                    )
-//                }
-
                 //no. of hours
 //                val x = (data.duration).toIntOrNull()
 //                val length = x?.div(3600)
@@ -218,19 +199,6 @@ fun FutureCard(
 //                        fontFamily = font
 //                    )
 //                }
-            }
-            Column(
-                modifier = Modifier.width(100.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ){
-                Image(
-                    painter = painterResource(id = R.drawable.icons_alarm),
-                    contentDescription = "Reminder",
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .align(Alignment.CenterHorizontally)
-                )
             }
         }
     }

@@ -59,8 +59,6 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     DrawerContent()
-//                    CodechefScreen()
-//                    CodeforcesScreen(onNavigate = { navController.navigate(Screens.RatingChangeScreen.name) })
                 }
             }
         }
@@ -115,6 +113,7 @@ fun DrawerContent(){
         content = {
             Scaffold(
                 scaffoldState = scaffoldState,
+                backgroundColor = Color.Black,
                 topBar = {
                     if(showTopBar) {
                         TopBar(
@@ -139,7 +138,7 @@ fun DrawerContent(){
                                 if (dragAmount < 0) {
                                     scope.launch { drawerState.close() }
                                 }
-                                change.consumePositionChange()
+                                change.consume()
                             }
                         }
                 ) {

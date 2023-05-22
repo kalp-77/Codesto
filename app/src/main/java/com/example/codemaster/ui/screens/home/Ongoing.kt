@@ -199,57 +199,17 @@ fun OngoingCard(
                     fontWeight = FontWeight.Bold,
                     fontFamily = font
                 )
-
-                //date
-//                if(data.site == "CodeChef") {
-//                    Text(
-//                        text =  "Start : ${data.start_time.toDate()?.formatTo("dd MMM, yyyy")}",
-//                        fontFamily = font
-//                    )
-//                }
-//                else {
-//                    val odt = OffsetDateTime.parse(data.start_time)
-//                    val dtf = DateTimeFormatter.ofPattern("dd MMM, uuuu", Locale.ENGLISH)
-//                    Text(
-//                        text = "Start : ${ dtf.format(odt) }",
-//                        fontFamily = font
-//                    )
-//                }
-
                 //no. of hours
-                val x = (data.duration).toIntOrNull()
-                val length = x?.div(3600)
-                if(length != null){
-                    Text(
-                        text = "Duration : $length hrs",
-                        fontFamily = font,
-                        fontSize = 13.sp
-                    )
-                }
+//                val x = (data.duration).toIntOrNull()
+//                val length = x?.div(3600)
+//                if(length != null){
+//                    Text(
+//                        text = "Duration : $length hrs",
+//                        fontFamily = font,
+//                        fontSize = 13.sp
+//                    )
+//                }
             }
-//            Column(
-//                modifier = Modifier.width(100.dp),
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//                verticalArrangement = Arrangement.Center
-//            ){
-//                Image(
-//                    painter = painterResource(id = R.drawable.icons_alarm),
-//                    contentDescription = "Reminder",
-//                    modifier = Modifier
-//                        .wrapContentSize()
-//                        .align(Alignment.CenterHorizontally)
-////                        .clickable {
-////                            intent.putExtra("platform", data.site)
-////                            intent.putExtra("contest", data.name)
-////                            alarmService.setAlarm(
-////                                MyApplication.instance,
-////                                data.site,
-////                                data.name,
-////                                data.start_time
-////                            )
-////                        },
-//                )
-//            }
         }
     }
 }

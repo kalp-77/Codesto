@@ -2,5 +2,6 @@
     <string name="app_name">CodeMaster</string>
     <string name="title_activity_web_view">WebViewActivity</string>
     <string name="title_activity_contest_details">ContestDetailsActivity</string>
+    <string name="title_activity_alarm_details">AlarmDetailsActivity</string>
 
 </resources>

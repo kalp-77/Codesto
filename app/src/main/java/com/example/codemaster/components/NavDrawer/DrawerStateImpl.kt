@@ -8,7 +8,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 private const val AnimationDurationMillis = 300
-private const val DrawerMaxElevation = 8f
+//private const val DrawerMaxElevation = 8f
 
 @Stable
 class DrawerStateImpl(

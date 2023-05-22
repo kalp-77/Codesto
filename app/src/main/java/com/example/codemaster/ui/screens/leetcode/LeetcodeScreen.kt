@@ -110,7 +110,7 @@ fun LeetcodeDisplayScreen(
 
     Box(
         modifier = Modifier
-            .background(Color(0xFF000000))
+            .background(Color(0xFF131313))
             .fillMaxSize()
     ){
         Column(
@@ -417,7 +417,7 @@ fun LeetcodeDisplayScreen(
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Grid10)
+                        .background(Color(0xff0B0A0A))
                         .padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly

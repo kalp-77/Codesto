@@ -176,10 +176,6 @@ fun ContestCard(
                     .padding(15.dp)
                     .width(250.dp)
                     .clickable {
-//                        val myIntent = Intent(MyApplication.instance, WebViewActivity::class.java)
-//                        myIntent.putExtra("key", data.url)
-//                        myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                        MyApplication.instance.startActivity(myIntent)
                         val myIntent = Intent(MyApplication.instance, ContestDetailsActivity::class.java)
                         myIntent.putExtra("platform", data.site)
                         myIntent.putExtra("contest", data.name)
@@ -207,46 +203,16 @@ fun ContestCard(
                     fontWeight = Bold,
                     fontFamily = font
                 )
-                //date
-//                if(data.site == "CodeChef") {
-//                    data.start_time.toDate()?.let {
-//                        Text(
-//                            text =  it.formatTo("dd MMM, yyyy"),
-//                            fontFamily = font
-//                        )
-//                    }
-//                }
-//                else {
-//                    val odt = OffsetDateTime.parse(data.start_time)
-//                    val dtf = DateTimeFormatter.ofPattern("dd MMM, uuuu", Locale.ENGLISH)
+//                no. of hours
+//                val x = (data.duration).toIntOrNull()
+//                val length = x?.div(3600)
+//                if(length != null){
 //                    Text(
-//                        text = dtf.format(odt),
+//                        text = "Duration : $length hrs",
 //                        fontFamily = font
 //                    )
 //                }
-//                no. of hours
-                val x = (data.duration).toIntOrNull()
-                val length = x?.div(3600)
-                if(length != null){
-                    Text(
-                        text = "Duration : $length hrs",
-                        fontFamily = font
-                    )
-                }
             }
-//            Column(
-//                modifier = Modifier.width(100.dp),
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//                verticalArrangement = Arrangement.Center
-//            ){
-//                Image(
-//                    painter = painterResource(id = R.drawable.icons_alarm),
-//                    contentDescription = "Reminder",
-//                    modifier = Modifier
-//                        .wrapContentSize()
-//                        .align(Alignment.CenterHorizontally)
-//                )
-//            }
         }
     }
 }
