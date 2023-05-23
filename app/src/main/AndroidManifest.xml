@@ -37,7 +37,13 @@
             android:name=".ContestDetailsActivity"
             android:exported="false"
             android:label="@string/title_activity_contest_details"
-            android:theme="@style/Theme.CodeMaster" />
+            android:theme="@style/Theme.CodeMaster" >
+            <intent-filter>
+                <action android:name="android.intent.action.INSERT" />
+                <data android:mimeType="vnd.android.cursor.dir/event" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".WebViewActivity"
             android:exported="false"

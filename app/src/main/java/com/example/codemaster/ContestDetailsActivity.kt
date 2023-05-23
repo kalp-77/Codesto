@@ -2,9 +2,12 @@ package com.example.codemaster
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -46,6 +49,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.core.content.ContextCompat.startActivity
 import com.example.codemaster.ContestDetailsActivity.Companion.TAG
 import com.example.codemaster.alarm.Alarm
 import com.example.codemaster.alarm.AlarmSchedulerImpl
@@ -96,7 +100,7 @@ fun Greeting(
 
     val scheduler = AlarmSchedulerImpl()
     val alarmId = "$contest.$startTime".hashCode()
-    val context = MyApplication.instance
+    val context = LocalContext.current
 
     val alarm =  checkAlarm(context, alarmId)
     var isAlarmSet by remember { mutableStateOf(alarm?.isEnabled ?: false) }
@@ -106,17 +110,22 @@ fun Greeting(
     val start_date: String
     val end_date: String
     val properStartTime: Long
+    val properEndTime: Long
 
     //date
     if(platform == "CodeChef") {
         start_date = startTime.toDate()?.formatTo("dd MMM, yyyy - hh:mm a")!!
         end_date = endTime.toDate()?.formatTo("dd MMM, yyyy - HH:mm")!!
         properStartTime = DateTimeConverter().convertCCTimeToLong(startTime)
+        properEndTime = DateTimeConverter().convertCCTimeToLong(endTime)
+
     }
     else {
         start_date = DateTimeConverter().convertStringToDate(startTime)
         end_date = DateTimeConverter().convertStringToDate(endTime)
         properStartTime = DateTimeConverter().convertTimeStringToLong(startTime)
+        properEndTime = DateTimeConverter().convertTimeStringToLong(endTime)
+
     }
 
 
@@ -297,7 +306,11 @@ fun Greeting(
             }
             Spacer(modifier = Modifier.height(5.dp))
             Card(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        AddToCalendar(context, contest = contest, url = url, begin = properStartTime, end =properEndTime )
+                    },
                 colors = CardDefaults.cardColors(Color(0xff101016))
 
             ) {
@@ -332,7 +345,7 @@ fun Greeting(
                         myIntent.putExtra("key", url)
                         myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         context.startActivity(myIntent)
-                     },
+                    },
                 colors = CardDefaults.cardColors(Color(0xff101016))
             ) {
                 Box(
@@ -381,4 +394,30 @@ fun checkAlarm(
         }
     }
     return null
+}
+
+fun AddToCalendar(
+    context: Context,
+    contest: String,
+    url: String,
+    begin: Long,
+    end: Long
+){
+
+
+    val intent = Intent(Intent.ACTION_INSERT).apply {
+        data = CalendarContract.Events.CONTENT_URI
+        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        putExtra(CalendarContract.Events.TITLE, contest)
+        putExtra(CalendarContract.Events.DESCRIPTION, url)
+        putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, begin)
+        putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end)
+    }
+    val packageManager = context.packageManager
+    val resolveInfo = packageManager.resolveActivity(intent, 0)
+    if (resolveInfo != null) {
+        MyApplication.instance.startActivity(intent)
+    }else{
+        Toast.makeText(context, "There is no app that can support this action", Toast.LENGTH_SHORT).show()
+    }
 }
