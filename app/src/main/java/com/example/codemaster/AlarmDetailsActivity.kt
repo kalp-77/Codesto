@@ -4,6 +4,7 @@ import android.app.KeyguardManager
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
@@ -32,8 +33,21 @@ import com.example.codemaster.ui.theme.CodeMasterTheme
 import com.example.codemaster.ui.theme.Purple40
 
 class AlarmDetailsActivity : ComponentActivity() {
+
+    private val timer = object : CountDownTimer(120000, 1000) {
+        override fun onTick(millisUntilFinished: Long) {
+        }
+
+        override fun onFinish() {
+            mediaPlayer.stop()
+            mediaPlayer.release()
+            vibrator.cancel()
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        timer.start()
 
         val scheduler = AlarmSchedulerImpl()
         val alarmId = intent?.getIntExtra("alarmId",0)

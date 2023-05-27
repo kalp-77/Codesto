@@ -29,7 +29,6 @@ class AlarmSchedulerImpl : AlarmScheduler {
     ) {
         val triggerTime = alarm.time - (30 * 60 * 1000)
         val startTimeString = SimpleDateFormat("HH:mm a", Locale.getDefault()).format(Date(alarm.time))
-        Log.d(TAG, "startTime: $startTimeString")
 
         val alarmIntent = Intent(context, AlarmReceiver::class.java)
         alarmIntent.putExtra("alarmObj", alarm)

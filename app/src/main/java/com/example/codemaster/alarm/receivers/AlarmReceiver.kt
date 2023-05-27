@@ -43,7 +43,6 @@ class AlarmReceiver: BroadcastReceiver() {
         notifIntent.putExtra("platform", alarmObj.name)
         notifIntent.putExtra("contest", alarmObj.description)
         notifIntent.putExtra("startTimeString", startTimeString)
-        Log.d(TAG, "startTime after notif: $startTimeString")
         val notifPI = PendingIntent.getActivity(context,alarmObj.id,notifIntent, PendingIntent.FLAG_IMMUTABLE)
 
 

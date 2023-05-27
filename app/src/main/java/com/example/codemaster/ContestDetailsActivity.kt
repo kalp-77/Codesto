@@ -107,22 +107,22 @@ fun Greeting(
     Log.d(TAG, "from sharedPref isAlarmSet: $isAlarmSet, isEnabled: ${alarm?.isEnabled}")
 
 
-    val start_date: String
-    val end_date: String
+    val formattedStartDate: String
+    val formattedEndDate: String
     val properStartTime: Long
     val properEndTime: Long
 
     //date
     if(platform == "CodeChef") {
-        start_date = startTime.toDate()?.formatTo("dd MMM, yyyy - hh:mm a")!!
-        end_date = endTime.toDate()?.formatTo("dd MMM, yyyy - HH:mm")!!
+        formattedStartDate = startTime.toDate()?.formatTo("dd MMM, yyyy - hh:mm a")!!
+        formattedEndDate = endTime.toDate()?.formatTo("dd MMM, yyyy - hh:mm a")!!
         properStartTime = DateTimeConverter().convertCCTimeToLong(startTime)
         properEndTime = DateTimeConverter().convertCCTimeToLong(endTime)
 
     }
     else {
-        start_date = DateTimeConverter().convertStringToDate(startTime)
-        end_date = DateTimeConverter().convertStringToDate(endTime)
+        formattedStartDate = DateTimeConverter().convertStringToDate(startTime)
+        formattedEndDate = DateTimeConverter().convertStringToDate(endTime)
         properStartTime = DateTimeConverter().convertTimeStringToLong(startTime)
         properEndTime = DateTimeConverter().convertTimeStringToLong(endTime)
 
@@ -220,7 +220,7 @@ fun Greeting(
                 verticalAlignment = Alignment.CenterVertically
 
             ){
-                Text(text = start_date, modifier = Modifier, fontSize = 16.sp, color = Color.White)
+                Text(text = formattedStartDate, modifier = Modifier, fontSize = 16.sp, color = Color.White)
                 Spacer(modifier = Modifier.width(20.dp))
             }
             Row(
@@ -235,21 +235,8 @@ fun Greeting(
                 verticalAlignment = Alignment.CenterVertically
 
             ){
-                Text(text = end_date, modifier = Modifier,  fontSize = 16.sp,  color = Color.White)
+                Text(text = formattedEndDate, modifier = Modifier,  fontSize = 16.sp,  color = Color.White)
                 Spacer(modifier = Modifier.width(20.dp))
-//                val x = (duration).toIntOrNull()
-//                val length = x?.div(3600)
-//                if(length != null) {
-//                    Log.d("TAG", "length: $length")
-//                    Log.d("TAG", "duration: $duration")
-//
-//                    Text(
-//                        text = "$length hrs",
-//                        modifier = Modifier,
-//                        fontSize = 16.sp
-//                    )
-//                }
-//                Text(text = endTime, modifier = Modifier,  fontSize = 16.sp)
             }
 
         }
@@ -388,7 +375,6 @@ fun checkAlarm(
         val savedAlarms = Gson().fromJson(json, Array<Alarm>::class.java)
         for (alarm in savedAlarms) {
             if (alarm.id == alarmId) {
-                Log.d(TAG, "checkAlarm: $alarm")
                 return alarm
             }
         }
