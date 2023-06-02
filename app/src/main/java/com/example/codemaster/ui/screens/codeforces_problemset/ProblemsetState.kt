@@ -1,6 +1,6 @@
 package com.example.codemaster.ui.screens.codeforces_problemset
 
-import com.example.codemaster.data.model.codeforces_model.Problem
+import com.example.codemaster.data.model.codeforces_model.problemset.Problem
 
 sealed class ProblemsetState{
     object Empty : ProblemsetState()

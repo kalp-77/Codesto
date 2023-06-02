@@ -53,3 +53,24 @@ val SnackbarGreen40 = Color(0xFF142723)
 
 val ThemeWhite = Color(0xFFF0F5F9)
 val ThemeLavender = Color(0xFFAEA7F5)
+
+val FriendsCard30 = Color(0xFF131212)
+val ProfileBackground100 = Color(0xFF95D0FF)
+
+// Rank colors
+val Newbie = Color(0xFFA7A7A7)
+val Pupil = Color(0xFFC4EC89)
+val Apprentice = Color(0xFF4CA74C)
+val Specialist = Color(0xFF57F3EA)
+val Expert = Color(0xFF7C7CFF)
+val CandidateMaster = Color(0xFFFF7AFF)
+val Master = Color(0xFFFFBD6E)
+val InternationalMaster = Color(0xFFFF8080)
+val Grandmaster = Color(0xFFFF5E5E)
+val InternationalGrandmaster = Color(0xFFFD3B3B)
+val LegendaryGrandmaster = Color(0xFFFD1C1C)
+
+// graph
+val Graph = Color(0xFFE5E7FF)
+val CustomSnackbar100 = Color(0xFF202A47)
+val Comrades100 = Color(0xFF1B1919)

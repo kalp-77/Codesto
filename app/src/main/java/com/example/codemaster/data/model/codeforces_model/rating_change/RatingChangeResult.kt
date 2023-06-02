@@ -1,4 +1,4 @@
-package com.example.codemaster.data.model.codeforces_model
+package com.example.codemaster.data.model.codeforces_model.rating_change
 
 import com.google.gson.annotations.SerializedName
 

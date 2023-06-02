@@ -18,7 +18,7 @@ class DrawerStateImpl(
         get() = animation.value * drawerWidth
 
     override val backgroundAlpha: Float
-        get() = .25f * animation.value
+        get() = 0f
 
     private val animation = Animatable(0f)
 

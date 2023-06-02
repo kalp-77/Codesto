@@ -15,6 +15,7 @@ enum class Screens{
     LeetcodeScreen,
     ProblemsetScreen,
     RatingChangeScreen,
+    FriendsScreen
 }
 sealed class BottomNavScreens(
     val route: String,

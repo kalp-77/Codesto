@@ -42,7 +42,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -54,11 +56,19 @@ import com.example.codemaster.ContestDetailsActivity.Companion.TAG
 import com.example.codemaster.alarm.Alarm
 import com.example.codemaster.alarm.AlarmSchedulerImpl
 import com.example.codemaster.alarm.AlarmSchedulerImpl.Companion.SHARED_PREFERENCES_NAME
+import androidx.constraintlayout.widget.ConstraintLayout
+import com.example.codemaster.ui.screens.home.font
 import com.example.codemaster.ui.screens.home.formatTo
 import com.example.codemaster.ui.screens.home.toDate
 import com.example.codemaster.ui.theme.CodeMasterTheme
 import com.example.codemaster.utils.DateTimeConverter
 import com.google.gson.Gson
+import kotlinx.coroutines.NonDisposableHandle.parent
+import java.text.SimpleDateFormat
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+import java.util.TimeZone
 
 class ContestDetailsActivity : ComponentActivity() {
     companion object{
@@ -87,6 +97,7 @@ class ContestDetailsActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Greeting(
@@ -171,9 +182,8 @@ fun Greeting(
         Spacer(modifier = Modifier.height(10.dp))
 
         ConstraintLayout(
-            modifier = Modifier.padding(0.dp),
-
-            ){
+            modifier = Modifier.padding(0.dp)
+        ){
             val (recordCircle, textStart, divider) = createRefs()
             val (circle, textEnd) = createRefs()
 

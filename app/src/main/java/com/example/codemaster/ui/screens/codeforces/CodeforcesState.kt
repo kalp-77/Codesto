@@ -1,8 +1,7 @@
 package com.example.codemaster.ui.screens.codeforces
 
 import com.example.codemaster.data.model.Codeforces
-import com.example.codemaster.data.model.codeforces_model.UserInfo
-import com.example.codemaster.data.model.codeforces_model.problem_solved.Result
+import com.example.codemaster.data.model.codeforces_model.user_info.UserInfo
 
 sealed class CodeforcesState{
     object Loading : CodeforcesState()
@@ -19,3 +18,8 @@ data class CodeforcesScreenData(
 data class SolvedProblemData(
     val data : Map<Int, Int>? = null
 )
+
+sealed class Screen {
+    object Friends : Screen()
+    object FriendsDetail : Screen()
+}

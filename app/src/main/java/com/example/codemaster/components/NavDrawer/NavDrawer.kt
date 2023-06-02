@@ -176,8 +176,8 @@ fun DrawerBody(
     Box(
         Modifier
             .padding(top = 10.dp, bottom = 10.dp, start = 5.dp, end = 10.dp)
-            .background(Color(0xFF272727))
             .clip(shape = RoundedCornerShape(10.dp))
+            .background(Color(0xFF000000))
             .pointerInput(Unit){
                 detectHorizontalDragGestures { change, dragAmount ->
                     if (dragAmount > 0) {

@@ -1,13 +1,15 @@
 package com.example.codemaster.data.source.repository
 
+import android.util.Log
 import com.example.codemaster.R
 import com.example.codemaster.data.model.Codechef
 import com.example.codemaster.data.model.Contest
 import com.example.codemaster.data.model.Leetcode
 import com.example.codemaster.data.model.Response
-import com.example.codemaster.data.model.codeforces_model.CodeforcesProblemset
-import com.example.codemaster.data.model.codeforces_model.UserRatingChanges
 import com.example.codemaster.data.model.codeforces_model.problem_solved.SolvedProblems
+import com.example.codemaster.data.model.codeforces_model.problemset.CodeforcesProblemset
+import com.example.codemaster.data.model.codeforces_model.rating_change.UserRatingChanges
+import com.example.codemaster.data.model.codeforces_model.user_info.UserInfoResult
 import com.example.codemaster.data.source.remote.CFCCApi
 import com.example.codemaster.data.source.remote.CodeforcesOfficialApi
 import com.example.codemaster.data.source.remote.ContestApi
@@ -17,11 +19,15 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.snapshots
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -33,7 +39,7 @@ class RepositoryImpl @Inject constructor(
     private val leetcodeApi: LeetcodeApi,
     private val contestApi: ContestApi,
     private val firebaseAuth: FirebaseAuth,
-    private val db : DatabaseReference
+    private val db : DatabaseReference,
 ) : Repository {
 
 
@@ -105,6 +111,78 @@ class RepositoryImpl @Inject constructor(
             emit(Response.Success("leetcode username saved"))
         } catch (e: Exception) {
             emit(Response.Failure(e.toString()))
+        }
+    }
+
+    override suspend fun saveFriends(friend: UserInfoResult): Flow<Response<String>> = flow {
+        try {
+            emit(Response.Loading(data = "Loading"))
+            val uid = db.child(firebaseAuth.currentUser?.uid.toString())
+            val friendsRef = uid.child("friends")
+            val existingFriendSnapshot = friendsRef.orderByChild("handle").equalTo(friend.handle).get().await()
+
+            Log.d("firebase", "exists : ${existingFriendSnapshot.exists()} ")
+            Log.d("firebase", "snapshot : $existingFriendSnapshot ")
+
+
+            if (!existingFriendSnapshot.exists()) {
+                friendsRef.push().setValue(friend).await()
+                Log.d("firebase", ": Friend successfully added ")
+
+                emit(Response.Success("Friend successfully added"))
+            } else {
+                // Friend data already exists, handle accordingly
+                Log.d("firebase", ": Friend data already exists ")
+
+                emit(Response.Failure(" failure :Friend data already exists"))
+            }
+        } catch (e:Exception) {
+            Log.d("firebase", " exception: ${e.message.toString()} ")
+
+            emit(Response.Failure(e.message.toString()))
+        }
+    }
+
+    override suspend fun getAllFriends(): Flow<Response<List<UserInfoResult>>?> = flow {
+        val uid = firebaseAuth.currentUser?.uid.toString()
+        val friendsRef = db.child(uid).child("friends")
+        friendsRef.get().await().run {
+            try {
+                val friendList = children.mapNotNull { dataSnapshot ->
+                    dataSnapshot.getValue(UserInfoResult::class.java)
+                }
+                emit(Response.Success(friendList))
+            } catch (e:Exception) {
+                emit(Response.Failure(e.message.toString()))
+            }
+        }
+    }
+
+
+    override suspend fun deleteFriend(friend: UserInfoResult) {
+        try {
+            val userUid = firebaseAuth.currentUser?.uid.toString()
+            val friendRef = db.child(userUid).child("friends")
+
+            friendRef.orderByChild("handle").equalTo(friend.handle.toString()).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (issue in dataSnapshot.children) {
+                            if (issue.getValue(UserInfoResult::class.java)?.handle == friend.handle) {
+                                issue.ref.removeValue()
+                                break  // Break the loop after deleting the first matching friend node
+                            }
+                        }
+                    }
+
+                }
+                override fun onCancelled(databaseError: DatabaseError) {
+                    Log.d("kalp", "firebase: ${databaseError.details}}")
+
+                }
+            })
+        } catch (e:Exception) {
+            Log.d("kalp", "firebase: ${e.message.toString()}}")
         }
     }
 
@@ -212,4 +290,27 @@ class RepositoryImpl @Inject constructor(
             emit(Response.Failure(it.message.toString()))
         }
     }
+
+
+//    override suspend fun deleteCodeforcesFriend(username: String): Flow<Response<String>> = flow {
+//        val usernameRef = db.child(firebaseAuth.currentUser?.uid.toString()).child("cf_friends")
+//        val usernamesSnapshot = usernameRef.get().await()
+//        try {
+//            val usernamesArray = usernamesSnapshot.value as ArrayList<*> // Get the current array of usernames
+//            val indexToRemove = usernamesArray.indexOf(username) // Get the index of the username to remove
+//
+//            if (indexToRemove > -1) { // If the username is in the array
+//                usernamesArray.removeAt(indexToRemove) // Remove it from the array
+//                usernameRef.setValue(usernamesArray).await() // Update the array in the database
+//                emit(Response.Success("Removed friend"))
+//            } else {
+//                emit(Response.Success("No friends exist"))
+//            }
+//        }
+//        catch (e: Exception) {
+//            emit(Response.Failure(e.toString()))
+//        }
+//    }
+//
+
 }

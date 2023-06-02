@@ -4,9 +4,10 @@ import com.example.codemaster.data.model.Codechef
 import com.example.codemaster.data.model.Contest
 import com.example.codemaster.data.model.Leetcode
 import com.example.codemaster.data.model.Response
-import com.example.codemaster.data.model.codeforces_model.CodeforcesProblemset
-import com.example.codemaster.data.model.codeforces_model.UserRatingChanges
+import com.example.codemaster.data.model.codeforces_model.problemset.CodeforcesProblemset
+import com.example.codemaster.data.model.codeforces_model.rating_change.UserRatingChanges
 import com.example.codemaster.data.model.codeforces_model.problem_solved.SolvedProblems
+import com.example.codemaster.data.model.codeforces_model.user_info.UserInfoResult
 import com.example.codemaster.ui.screens.codeforces.CodeforcesScreenData
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
@@ -25,6 +26,9 @@ interface Repository {
     suspend fun saveCodechefUser(username: String?) : Flow<Response<String>>
     suspend fun saveCodeforcesUser(username: String?) : Flow<Response<String>>
     suspend fun saveLeetcodeUser(username: String?) : Flow<Response<String>>
+    suspend fun saveFriends(friend: UserInfoResult) : Flow<Response<String>>
+    suspend fun getAllFriends() : Flow<Response<List<UserInfoResult>>?>
+    suspend fun deleteFriend(friend: UserInfoResult)
 
 
     fun getCodechefUser() : Flow<String?>
@@ -52,6 +56,9 @@ interface Repository {
 
     /** Solved Problem Api Data  **/
     suspend fun getSolvedProblemData(username: String) : Flow<Response<SolvedProblems>?>
+
+
+
 
 
 }

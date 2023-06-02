@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import com.example.codemaster.components.TabView
 import com.example.codemaster.ui.screens.codechef.CodechefScreen
 import com.example.codemaster.ui.screens.codeforces.CodeforcesScreen
+import com.example.codemaster.ui.screens.codeforces.FriendsScreen
 import com.example.codemaster.ui.screens.codeforces_problemset.ProblemsetScreen
 import com.example.codemaster.ui.screens.codeforces_ratingchange.RatingChangeScreen
 import com.example.codemaster.ui.screens.home.HomeScreen
@@ -59,6 +60,7 @@ fun NavigationGraph(
                             inclusive = true
                         }
                     }
+
                 }
             )
         }
@@ -69,7 +71,8 @@ fun NavigationGraph(
             CodeforcesScreen(
                 onNavigate = {
                     navController.navigate(it.name)
-                }
+                },
+                navController
             )
         }
         composable(route = Screens.ProblemsetScreen.name) {
@@ -86,6 +89,9 @@ fun NavigationGraph(
         }
         composable(route = Screens.HomeScreen.name){
             TabView()
+        }
+        composable(route = Screens.FriendsScreen.name) {
+            FriendsScreen()
         }
     }
 }

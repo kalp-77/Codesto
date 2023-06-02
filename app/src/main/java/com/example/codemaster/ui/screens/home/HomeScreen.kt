@@ -89,7 +89,7 @@ fun ContestsDisplayScreen(
             .fillMaxSize()
 //            .padding(bottom = 50.dp)
     ) {
-        items( data ) {
+        items(data) {
             ContestCard(
                 data = it
             )

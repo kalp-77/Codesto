@@ -54,7 +54,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.codemaster.MyApplication
 import com.example.codemaster.WebViewActivity
-import com.example.codemaster.data.model.codeforces_model.Problem
+import com.example.codemaster.data.model.codeforces_model.problemset.Problem
 
 val font = FontFamily.SansSerif
 @RequiresApi(Build.VERSION_CODES.O)

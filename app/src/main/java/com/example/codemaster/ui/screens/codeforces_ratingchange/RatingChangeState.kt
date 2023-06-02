@@ -1,6 +1,6 @@
 package com.example.codemaster.ui.screens.codeforces_ratingchange
 
-import com.example.codemaster.data.model.codeforces_model.RatingChangeResult
+import com.example.codemaster.data.model.codeforces_model.rating_change.RatingChangeResult
 
 sealed class RatingChangeState{
     object Empty : RatingChangeState()

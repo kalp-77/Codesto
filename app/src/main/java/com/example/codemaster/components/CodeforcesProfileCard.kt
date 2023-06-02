@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -37,17 +39,17 @@ import com.example.codemaster.ui.theme.ThemeLavender
 
 @Composable
 fun ProfileCard(
-    avatar: Any,
+    avatar: String,
     handle: String,
     rating: String,
     maxRating: String,
     platformIcon: Int,
     rank: String,
-    platform: String
+    platform: String,
+    onNavigation: ()-> Unit
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.wrapContentSize()
     ) {
         Column(
             modifier = Modifier
@@ -144,6 +146,7 @@ fun ProfileCard(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .wrapContentHeight()
+                                    .clickable(onClick = onNavigation)
                                     .padding(10.dp),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
@@ -183,28 +186,43 @@ fun ProfileCard(
                         }
                     }
                     Spacer(modifier = Modifier.height(40.dp))
-                    Row(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .wrapContentHeight(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
+                            .wrapContentHeight()
                     ) {
                         Text(
-                            modifier = Modifier.fillMaxWidth(0.6f),
-                            text = "Analysis Your Progress \nTrack Your Rating \nChange",
-                            fontSize = 12.sp,
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "Visualize your rating change",
+                            fontSize = 18.sp,
                             fontWeight = FontWeight.Light,
-                            color = Grid10,
+                            color = Color.DarkGray,
                             fontFamily = FontFamily(Font(R.font.montserrat)),
                             lineHeight = 20.sp,
                         )
-                        Box(modifier = Modifier.fillMaxWidth()) {
-                            Image(
-                                modifier = Modifier.align(Alignment.Center).fillMaxWidth().size(25.dp),
-                                painter = painterResource(id  = R.drawable.arrow_right),
-                                contentDescription = null
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight(),
+                        ) {
+                            Text(
+                                modifier = Modifier.wrapContentWidth(),
+                                text = "Track your progress",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Light,
+                                color = Color.DarkGray,
+                                fontFamily = FontFamily(Font(R.font.montserrat)),
+                                lineHeight = 20.sp,
                             )
+                            Box(
+                                modifier = Modifier.fillMaxWidth().align(Alignment.CenterVertically)
+                            ) {
+                                Image(
+                                    modifier = Modifier.fillMaxWidth().align(Alignment.CenterStart).size(10.dp),
+                                    painter = painterResource(id  = R.drawable.arrow_right),
+                                    contentDescription = null
+                                )
+                            }
                         }
                     }
                 }
@@ -212,107 +230,3 @@ fun ProfileCard(
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun Preview() {
-//
-//}
-//Column(
-//modifier = Modifier
-////                .padding(15.dp)
-//.fillMaxWidth()
-//.wrapContentHeight()
-//) {
-//    Card(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .wrapContentHeight()
-//            .background(Color.Transparent),
-//        shape = RoundedCornerShape(5.dp)
-//    ) {
-//        Column(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .background(
-//                    brush = Brush.run {
-//                        linearGradient(
-//                            colors = listOf(
-//                                com.example.codemaster.ui.theme.BlockCard,
-//                                BlueG,
-//                            )
-//                        )
-//                    }
-//                )
-//                .padding(10.dp)
-//        ) {
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .wrapContentHeight()
-//            ) {
-//                Box(
-//                    modifier = Modifier.size(30.dp)
-//                ) {
-//                    Image(
-//                        painter = painterResource(id = platformIcon),
-//                        contentDescription = null
-//                    )
-//                }
-//                Spacer(modifier = Modifier.width(8.dp))
-//                Column(
-//                    modifier = Modifier.height(30.dp),
-//                    verticalArrangement = Arrangement.Center
-//                ) {
-//                    Text(
-//                        modifier = Modifier,
-//                        text = platform,
-//                        fontWeight = FontWeight.Bold,
-//                        fontSize = 10.sp
-//                    )
-//                }
-//            }
-//            Spacer(modifier = Modifier.height(30.dp))
-//            Column(
-//                modifier = Modifier.fillMaxWidth(),
-//                horizontalAlignment = Alignment.CenterHorizontally
-//            ) {
-//                Text(
-//                    text = rank,
-//                    fontSize = 16.sp,
-//                    letterSpacing = 2.sp,
-//                    fontWeight = FontWeight.Medium
-//                )
-//                Spacer(modifier = Modifier.height(5.dp))
-//                Text(
-//                    text = rating,
-//                    fontSize = 32.sp,
-//                    letterSpacing = 2.sp,
-//                    fontWeight = FontWeight.ExtraBold
-//                )
-//
-//            }
-//
-//            Spacer(modifier = Modifier.height(30.dp))
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .wrapContentHeight(),
-//                horizontalArrangement = Arrangement.SpaceBetween
-//            ) {
-//                Text(
-//                    modifier = Modifier,
-//                    text = "@${handle}",
-//                    fontWeight = FontWeight.Bold,
-//                    fontSize = 10.sp
-//                )
-//                Text(
-//                    modifier = Modifier,
-//                    text = "Max Rating - $maxRating",
-//                    fontWeight = FontWeight.Bold,
-//                    fontSize = 10.sp
-//                )
-//            }
-//        }
-//    }
-//}

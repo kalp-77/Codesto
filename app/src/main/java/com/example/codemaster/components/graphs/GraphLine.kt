@@ -312,7 +312,7 @@ fun GraphLine(
     val maxScrollOffset =  remember { mutableStateOf(0f)}
     val dragOffset = remember { mutableStateOf(0f) }
     val endPoint = remember { mutableStateOf(0f) }
-    Log.d("123", "GraphLine: size ${endPoint}")
+    Log.d("123", "GraphLine: size $endPoint")
     val offset = remember { mutableStateOf(0f)}
     offset.value = endPoint.value
 

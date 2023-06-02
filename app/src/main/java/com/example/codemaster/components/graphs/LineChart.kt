@@ -2,6 +2,7 @@ package com.example.codemaster.components.graphs
 
 import android.annotation.SuppressLint
 import android.graphics.Paint
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
@@ -65,7 +67,8 @@ fun LineChartCard(
         Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(start = 5.dp),
+            .padding(start = 5.dp, top = 10.dp),
+        border = BorderStroke(1.dp, Grid10),
         colors = CardDefaults.cardColors(ThemeBlack30),
         shape = RoundedCornerShape(15.dp)
     ) {
@@ -83,7 +86,7 @@ fun LineChartCard(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(0.12f)
-                        .size(20.dp)
+                        .size(15.dp)
                 ) {
                     Image(
                         modifier = Modifier
@@ -99,7 +102,7 @@ fun LineChartCard(
                 ) {
                     androidx.compose.material3.Text(
                         modifier = Modifier,
-                        fontSize = 14.sp,
+                        fontSize = 12.sp,
                         color = Color.White,
                         text = "Rating Graph"
                     )
@@ -108,10 +111,11 @@ fun LineChartCard(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    Column(modifier = Modifier.padding(end = 10.dp), horizontalAlignment = Alignment.End) {
+                    Column(modifier = Modifier.padding(end = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+
                         androidx.compose.material3.Text(
                             modifier = Modifier,
-                            fontSize = 18.sp,
+                            fontSize = 14.sp,
                             color = Color.White,
                             text = maxRating.toString(),
                             fontWeight = FontWeight.Bold
@@ -132,6 +136,12 @@ fun LineChartCard(
 //                viewModel.graphDataState.value.linePlotLines,
 
             )
+            Box(
+                modifier = Modifier.wrapContentSize().padding(bottom = 20.dp),
+                contentAlignment = Alignment.BottomCenter
+            ) {
+                CustomSnackbar(ratingStatus = ratingStatus)
+            }
         }
     }
 }
@@ -155,13 +165,13 @@ fun LineChart(
     if(linePlotLines.isNotEmpty()) {
         Card(
             modifier = Modifier
-                .fillMaxHeight()
+                .wrapContentHeight()
                 .fillMaxWidth(),
             shape = RoundedCornerShape(4.dp),
             elevation = CardDefaults.cardElevation(0.dp),
             colors = CardDefaults.cardColors(Black20)
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = Modifier.wrapContentSize()) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(1f)
@@ -206,15 +216,16 @@ fun LineChart(
                                 strokeWidth = 1.dp,
                                 pathEffect = PathEffect.dashPathEffect(floatArrayOf(40f, 20f)),
                             ),
+                            detectionTime = 30L
                         ),
                         horizontalExtraSpace = 5.dp,
-                        grid = LinePlot.Grid(
-                            steps = 5,
-                            color = Grid10
-                        ),
+//                        grid = LinePlot.Grid(
+//                            steps = 5,
+//                            color = Grid10
+//                        ),
                         isZoomAllowed = true,
                         xAxis = LinePlot.XAxis(
-                            stepSize = 50.dp,
+                            stepSize = 80.dp,
                             paddingBottom = 4.dp,
                             steps = 6,
                             content = { min, offset, max ->
@@ -260,12 +271,7 @@ fun LineChart(
                         }
                     }
                 )
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.BottomCenter
-                ) {
-                    CustomSnackbar(ratingStatus = ratingStatus)
-                }
+
             }
         }
     }

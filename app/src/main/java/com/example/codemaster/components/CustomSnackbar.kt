@@ -24,10 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.codemaster.R
+import com.example.codemaster.ui.theme.CustomSnackbar100
 import com.example.codemaster.ui.theme.GreenUpArrow
 import com.example.codemaster.ui.theme.PurpleNavy20
 
-@Preview
 @Composable
 fun CustomSnackbar(
     ratingStatus: Int
@@ -38,7 +38,7 @@ fun CustomSnackbar(
             .padding(start = 15.dp, end = 15.dp, top = 5.dp)
             .wrapContentHeight(),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(PurpleNavy20)
+        colors = CardDefaults.cardColors(CustomSnackbar100)
     ){
         Row(
             modifier = Modifier
@@ -67,7 +67,7 @@ fun CustomSnackbar(
                     modifier = Modifier.fillMaxWidth(1f),
                     fontSize = 10.sp,
                     color = Color.White,
-                    text = "Your rating increased by ${ratingStatus} from last contest"
+                    text = "Your rating increased by $ratingStatus from last contest"
                 )
             }
         }

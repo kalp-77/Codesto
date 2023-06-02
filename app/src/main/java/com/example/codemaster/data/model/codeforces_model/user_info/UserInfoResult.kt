@@ -1,38 +1,38 @@
-package com.example.codemaster.data.model.codeforces_model
+package com.example.codemaster.data.model.codeforces_model.user_info
 
 import com.google.gson.annotations.SerializedName
 
 data class UserInfoResult(
     @SerializedName("avatar")
-    val avatar: String,
+    val avatar: String? = "",
     @SerializedName("city")
-    val city: String,
+    val city: String? = "",
     @SerializedName("contribution")
-    val contribution: Int,
+    val contribution: Int? = 0,
     @SerializedName("country")
-    val country: String,
+    val country: String? = "",
     @SerializedName("firstName")
-    val firstName: String,
+    val firstName: String? = "",
     @SerializedName("friendOfCount")
-    val friendOfCount: Int,
+    val friendOfCount: Int? =0,
     @SerializedName("handle")
-    val handle: String,
+    val handle: String? = "",
     @SerializedName("lastName")
-    val lastName: String,
+    val lastName: String? = "",
     @SerializedName("lastOnlineTimeSeconds")
-    val lastOnlineTimeSeconds: Int,
+    val lastOnlineTimeSeconds: Int? = 0,
     @SerializedName("maxRank")
-    val maxRank: String,
+    val maxRank: String? = "",
     @SerializedName("maxRating")
-    val maxRating: Int,
+    val maxRating: Int? = 0,
     @SerializedName("organization")
-    val organization: String,
+    val organization: String? = "",
     @SerializedName("rank")
-    val rank: String,
+    val rank: String? = "",
     @SerializedName("rating")
-    val rating: Int,
+    val rating: Int? = 0,
     @SerializedName("registrationTimeSeconds")
-    val registrationTimeSeconds: Int,
+    val registrationTimeSeconds: Int = 0,
     @SerializedName("titlePhoto")
-    val titlePhoto: String
+    val titlePhoto: String = ""
 )

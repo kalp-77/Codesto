@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.codemaster.data.model.Response
-import com.example.codemaster.data.model.codeforces_model.Problem
+import com.example.codemaster.data.model.codeforces_model.problemset.Problem
 import com.example.codemaster.data.source.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

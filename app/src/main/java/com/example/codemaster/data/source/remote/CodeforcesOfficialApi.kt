@@ -1,8 +1,8 @@
 package com.example.codemaster.data.source.remote
 
-import com.example.codemaster.data.model.codeforces_model.CodeforcesProblemset
-import com.example.codemaster.data.model.codeforces_model.UserInfo
-import com.example.codemaster.data.model.codeforces_model.UserRatingChanges
+import com.example.codemaster.data.model.codeforces_model.problemset.CodeforcesProblemset
+import com.example.codemaster.data.model.codeforces_model.user_info.UserInfo
+import com.example.codemaster.data.model.codeforces_model.rating_change.UserRatingChanges
 import com.example.codemaster.data.model.codeforces_model.problem_solved.SolvedProblems
 import retrofit2.Response
 import retrofit2.http.GET

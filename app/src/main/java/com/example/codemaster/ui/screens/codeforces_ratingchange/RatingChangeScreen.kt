@@ -25,7 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.codemaster.data.model.codeforces_model.RatingChangeResult
+import com.example.codemaster.data.model.codeforces_model.rating_change.RatingChangeResult
 
 
 val font = FontFamily.SansSerif

@@ -156,8 +156,16 @@ dependencies {
     // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
     implementation("com.patrykandpatrick.vico:compose-m3:1.6.5")
 
-
     //constraint layout
     implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha09")
+
+    // Room Database
+    implementation("androidx.room:room-runtime:2.5.1")
+    implementation("androidx.room:room-ktx:2.5.1")
+    implementation("androidx.compose.runtime:runtime-livedata:1.4.3")
+    annotationProcessor("androidx.room:room-compiler:2.5.1")
+    kapt("androidx.room:room-compiler:2.5.1")
+
+    implementation("me.saket.swipe:swipe:1.0.0")
 
 }

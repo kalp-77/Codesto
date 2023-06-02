@@ -6,11 +6,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
@@ -23,10 +25,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.consumePositionChange
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.codemaster.components.BottomNav
@@ -51,13 +55,16 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CodeMasterTheme {
-                // A surface container using the 'background' color from the theme
+            CodeMasterTheme(
+                darkTheme = true,
+                dynamicColor = true
+            ) {
+//                 A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = Color(0xFF272727)
+                    color = Color(0xFF131314),
+                    shadowElevation = 0.dp
                 ) {
-
                     DrawerContent()
                 }
             }
@@ -83,21 +90,24 @@ fun DrawerContent(){
         Screens.CodeforcesScreen.name-> false
         Screens.CodechefScreen.name -> false
         Screens.LeetcodeScreen.name -> false
+        Screens.FriendsScreen.name-> false
         else -> true
     }
 
     showTopBar = when(navBackStackEntry?.destination?.route){
         Screens.RatingChangeScreen.name -> false
+        Screens.CodeforcesScreen.name-> false
+
         else -> true
     }
 
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     //handle drawer width on open
-    val drawerState = rememberDrawerState( drawerWidth = 250.dp,)
+    val drawerState = rememberDrawerState(drawerWidth = 250.dp)
 
     AnimatedDrawer(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().background(Color.Black),
         state = drawerState,
         drawerContent = {
             DrawerBody (
@@ -112,8 +122,8 @@ fun DrawerContent(){
         },
         content = {
             Scaffold(
-                scaffoldState = scaffoldState,
                 backgroundColor = Color.Black,
+                scaffoldState = scaffoldState,
                 topBar = {
                     if(showTopBar) {
                         TopBar(
@@ -125,11 +135,11 @@ fun DrawerContent(){
                 },
                 bottomBar = { if (showBottomBar) BottomNav(navController = navController) },
             ) {
-                    innerPadding ->
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(innerPadding)
+                        .background(Color.Black)
+                        .padding(it)
                         .pointerInput(Unit) {
                             detectHorizontalDragGestures { change, dragAmount ->
                                 if (dragAmount > 10) {

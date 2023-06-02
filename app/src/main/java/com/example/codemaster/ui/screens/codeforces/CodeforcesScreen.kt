@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
@@ -26,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.codemaster.R
 import com.example.codemaster.components.HorizontalCarousel
 import com.example.codemaster.components.ProfileCard
@@ -44,10 +47,13 @@ val font = FontFamily.SansSerif
 @Composable
 fun CodeforcesScreen(
     onNavigate: (route: Screens) -> Unit,
+    navController: NavController,
     viewModel: CodeforcesViewModel = hiltViewModel()
 ) {
     val state = viewModel.uiState.collectAsState().value
     val solvedProblemState = viewModel.solvedProblemState.collectAsState()
+
+
 
     LaunchedEffect(key1 = true) {
         viewModel.uiEvents.collect {
@@ -61,10 +67,7 @@ fun CodeforcesScreen(
                 is NavigateUI.PopBackStack -> {
 
                 }
-
-                else -> {}
             }
-
         }
     }
     Column{
@@ -85,29 +88,30 @@ fun CodeforcesScreen(
 
                 Box(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.Black)
+                        .wrapContentSize()
+                        .background(Darkblack30)
                         .verticalScroll(state = rememberScrollState())
                 ) {
                     Column(
                         modifier = Modifier
-                            .fillMaxSize()
+                            .wrapContentSize()
                             .padding(10.dp)
                     ) {
                         ProfileCard(
-                            avatar = state.data.userData.result[0].avatar,
-                            handle = state.data.userData.result[0].handle,
+                            avatar = state.data.userData.result[0].avatar!!,
+                            handle = state.data.userData.result[0].handle!!,
                             rating = state.data.userData.result[0].rating.toString(),
                             maxRating = state.data.userData.result[0].maxRating.toString(),
                             platformIcon = R.drawable.codeforces,
-                            rank = state.data.userData.result[0].rank.toUpperCase(),
-                            platform = "CODEFORCES"
+                            rank = state.data.userData.result[0].rank!!.toUpperCase(),
+                            platform = "CODEFORCES",
+                            onNavigation = { navController.navigate(Screens.FriendsScreen.name) }
                         )
                         Spacer(modifier = Modifier.height(22.dp))
                         LineChartCard(
                             linePlotLines = viewModel.graphDataState.value.linePlotLines,
                             size = viewModel.graphDataState.value.dataPoints.size,
-                            maxRating = state.data.userData.result[0].maxRating,
+                            maxRating = state.data.userData.result[0].maxRating!!,
                             ratingStatus = state.ratingStatus
                         )
                         Spacer(modifier = Modifier.height(20.dp))
@@ -118,8 +122,7 @@ fun CodeforcesScreen(
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .wrapContentHeight()
-                                        .verticalScroll(rememberScrollState()),
+                                        .wrapContentHeight(),
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally
 
