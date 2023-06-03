@@ -57,7 +57,7 @@ fun BottomSheetContent(
     scope: CoroutineScope,
     viewModel: CodeforcesViewModel = hiltViewModel()
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
+
     val handle = remember { mutableStateOf("") }
     val getUser = viewModel.friendGet.collectAsState()
     val saveUser = viewModel.friendSave.collectAsState()
@@ -67,6 +67,7 @@ fun BottomSheetContent(
         }
     }
     val flag = remember { mutableStateOf(false) }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(modifier = Modifier.padding(10.dp)) {
         Box(modifier = Modifier.fillMaxWidth()){

@@ -56,11 +56,10 @@ fun BottomNav(
                     navController.navigate(item.route){
                         navController.graph.startDestinationRoute?.let { screen ->
                             popUpTo(screen) {
-                                saveState = true
+                                saveState = false
                             }
                         }
-                        launchSingleTop = true
-                        restoreState = true
+                        restoreState = false
                     }
                     currentRoute.value = item.route
                 }

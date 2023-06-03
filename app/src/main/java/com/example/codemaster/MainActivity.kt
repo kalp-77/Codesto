@@ -133,7 +133,7 @@ fun DrawerContent(){
                         )
                     }
                 },
-                bottomBar = { if (showBottomBar) BottomNav(navController = navController) },
+//                bottomBar = { if (showBottomBar) BottomNav(navController = navController) },
             ) {
                 Box(
                     modifier = Modifier

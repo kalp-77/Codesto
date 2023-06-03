@@ -170,7 +170,8 @@ fun DrawerBody(
         BottomNavScreens.HomeScreen,
         BottomNavScreens.CodeforcesScreen,
         BottomNavScreens.CodechefScreen,
-        BottomNavScreens.LeetcodeScreen
+        BottomNavScreens.LeetcodeScreen,
+        BottomNavScreens.PlatformScreen
     )
 
     Box(
@@ -232,7 +233,6 @@ fun DrawerBody(
                         text = "Hello!",
                         style = MaterialTheme.typography.headlineMedium,
                         modifier = Modifier,
-//                            .padding(all = 10.dp),
                         fontSize = 15.sp,
                         color = Color(0xFF878A92)
                     )
@@ -250,7 +250,7 @@ fun DrawerBody(
             //nav drawer navigation
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
-            items.forEach{ items ->
+            items.forEach{ item ->
                 Row (
                     modifier = Modifier
                         .clickable {
@@ -259,10 +259,10 @@ fun DrawerBody(
                         }
                 ){
                     DrawerMenuItem(
-                        item = items,
-                        selected = currentRoute == items.route,
+                        item = item,
+                        selected = currentRoute == item.route,
                         onItemClick = {
-                            navController.navigate(items.route){
+                            navController.navigate(item.route){
                                 navController.graph.startDestinationRoute?.let{ route ->
                                     popUpTo(route){
                                         saveState = true

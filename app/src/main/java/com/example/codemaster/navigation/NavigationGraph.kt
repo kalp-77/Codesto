@@ -47,7 +47,9 @@ fun NavigationGraph(
             SignupScreen(
                 onNavigate = {
                     navController.navigate(it.name){
-                        popUpTo(it.name){ inclusive = true }
+                        popUpTo(it.name){
+                            inclusive = true
+                        }
                     }
                 }
             )
@@ -56,11 +58,8 @@ fun NavigationGraph(
             PlatformScreen(
                 onNavigate = {
                     navController.navigate(it.name) {
-                        popUpTo(it.name) {
-                            inclusive = true
-                        }
+                        popUpTo(0)
                     }
-
                 }
             )
         }

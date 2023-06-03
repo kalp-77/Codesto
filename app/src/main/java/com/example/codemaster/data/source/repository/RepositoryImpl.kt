@@ -18,6 +18,7 @@ import com.example.codemaster.ui.screens.codeforces.CodeforcesScreenData
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -62,21 +63,66 @@ class RepositoryImpl @Inject constructor(
         name: String,
         email: String,
         password: String
-    ): Flow<Response<AuthResult>> {
-        return flow {
-            emit(Response.Loading())
+    ): Flow<Response<AuthResult>> = flow {
+        emit(Response.Loading())
+        try {
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             result?.user?.updateProfile(userProfileChangeRequest {
                 displayName = name
             })?.await()
-            emit(Response.Success(result))
-        }.catch {
-            emit(Response.Failure(it.message.toString()))
+//            val uid = firebaseAuth.currentUser?.uid.toString()
+//            db.child(uid).child("username").setValue(name).await()
+        } catch (e: Exception) {
+            emit(Response.Failure(e.message.toString()))
+        }
+    }
+
+    override suspend fun updateUsername(username: String): Flow<Response<String>> = flow {
+        val user = FirebaseAuth.getInstance().currentUser
+
+// Create a UserProfileChangeRequest object with the updated display name (username)
+        val profileUpdates = UserProfileChangeRequest.Builder()
+            .setDisplayName(username)
+            .build()
+        emit(Response.Loading())
+        try {
+            if (user?.updateProfile(profileUpdates)?.isSuccessful == true) {
+                emit(Response.Success(data = "Updated successfully"))
+            } else {
+                emit(Response.Success(data = "Failed to update username"))
+            }
+        } catch(e:Exception) {
+            emit(Response.Failure(message = e.message.toString()))
         }
     }
 
     override fun logout() {
         firebaseAuth.signOut()
+    }
+
+    override suspend fun savePlatformUser(
+        username: String,
+        ccUsername: String,
+        cfUsername: String,
+        lcUsername: String
+    ): Flow<Response<String>> = flow {
+        try {
+            emit(Response.Loading())
+            val user = FirebaseAuth.getInstance().currentUser
+            UserProfileChangeRequest.Builder()
+                .setDisplayName(username)
+                .build()
+//            if (user?.updateProfile(profileUpdates)?.isSuccessful == false) {
+//                emit(Response.Failure(message = "Failed to update username"))
+//            }
+            val uid = firebaseAuth.currentUser?.uid.toString()
+            db.child(uid).child("codechef").setValue(ccUsername).await()
+            db.child(uid).child("codeforces").setValue(cfUsername).await()
+            db.child(uid).child("leetcode").setValue(lcUsername).await()
+            emit(Response.Success("usernames updated successfully"))
+        } catch (e: Exception) {
+            emit(Response.Failure(e.toString()))
+        }
     }
 
 
@@ -117,28 +163,20 @@ class RepositoryImpl @Inject constructor(
     override suspend fun saveFriends(friend: UserInfoResult): Flow<Response<String>> = flow {
         try {
             emit(Response.Loading(data = "Loading"))
-            val uid = db.child(firebaseAuth.currentUser?.uid.toString())
-            val friendsRef = uid.child("friends")
+            val uid = firebaseAuth.currentUser?.uid.toString()
+            val friendsRef = db.child(uid).child("friends")
             val existingFriendSnapshot = friendsRef.orderByChild("handle").equalTo(friend.handle).get().await()
 
-            Log.d("firebase", "exists : ${existingFriendSnapshot.exists()} ")
-            Log.d("firebase", "snapshot : $existingFriendSnapshot ")
 
 
             if (!existingFriendSnapshot.exists()) {
                 friendsRef.push().setValue(friend).await()
-                Log.d("firebase", ": Friend successfully added ")
-
                 emit(Response.Success("Friend successfully added"))
             } else {
                 // Friend data already exists, handle accordingly
-                Log.d("firebase", ": Friend data already exists ")
-
                 emit(Response.Failure(" failure :Friend data already exists"))
             }
         } catch (e:Exception) {
-            Log.d("firebase", " exception: ${e.message.toString()} ")
-
             emit(Response.Failure(e.message.toString()))
         }
     }
@@ -202,6 +240,11 @@ class RepositoryImpl @Inject constructor(
         return db.child(firebaseAuth.currentUser?.uid.toString()).child("leetcode").snapshots.map {
             it.value.toString()
         }
+    }
+
+    override suspend fun getUsername(): Flow<String?> = flow {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        emit(currentUser?.displayName)
     }
 
     override suspend fun getCodechefData(username: String): Flow<Response<Codechef>?> {

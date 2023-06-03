@@ -40,6 +40,7 @@ import com.example.codemaster.MyApplication
 import com.example.codemaster.R
 import com.example.codemaster.WebViewActivity
 import com.example.codemaster.data.model.ContestItem
+import com.example.codemaster.navigation.Screens
 import com.example.codemaster.ui.screens.codeforces_problemset.Nul
 import java.text.SimpleDateFormat
 import java.time.OffsetDateTime
@@ -87,7 +88,6 @@ fun ContestsDisplayScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-//            .padding(bottom = 50.dp)
     ) {
         items(data) {
             ContestCard(
